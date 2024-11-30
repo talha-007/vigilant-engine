@@ -11,15 +11,21 @@ import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import { Stack } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
-const pages = ["Home", "List", "Blog"];
+const pages = [
+  { id: 1, pageName: "Home", path: "/" },
+  { id: 2, pageName: "List", path: "/list" },
+  { id: 3, pageName: "Blog", path: "/blog" },
+];
 
 function Navbar() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
+  const [scrolled, setScrolled] = React.useState(false);
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -29,10 +35,30 @@ function Navbar() {
     setAnchorElNav(null);
   };
 
+  React.useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 80) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
     <AppBar
       position="fixed"
-      sx={{ background: "none", boxShadow: "none", padding: "2rem 0rem" }}
+      sx={{
+        background: scrolled ? "#fff" : "transparent",
+        transition: "background 0.3s ease",
+        boxShadow: scrolled ? "0px 4px 6px rgba(0, 0, 0, 0.1)" : "none",
+        padding: "1rem 0rem",
+      }}
     >
       <Container maxWidth="xl">
         <Toolbar
@@ -40,7 +66,13 @@ function Navbar() {
           sx={{ display: "flex", justifyContent: "space-between" }}
         >
           <Box sx={{ display: "flex", alignItems: "center" }}>
-            <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
+            <AdbIcon
+              sx={{
+                display: { xs: "none", md: "flex" },
+                mr: 1,
+                color: scrolled ? "#000" : "#fff",
+              }}
+            />
             <Typography
               variant="h6"
               noWrap
@@ -52,7 +84,7 @@ function Navbar() {
                 fontFamily: "monospace",
                 fontWeight: 700,
                 letterSpacing: ".3rem",
-                color: "inherit",
+                color: scrolled ? "#000" : "#fff",
                 textDecoration: "none",
               }}
             >
@@ -88,8 +120,21 @@ function Navbar() {
               sx={{ display: { xs: "block", md: "none" } }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography sx={{ textAlign: "center" }}>{page}</Typography>
+                <MenuItem
+                  key={page.id}
+                  onClick={() => {
+                    navigate(page.path);
+                    handleCloseNavMenu();
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      textAlign: "center",
+                      color: scrolled ? "#000" : "#fff",
+                    }}
+                  >
+                    {page.pageName}
+                  </Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -107,7 +152,7 @@ function Navbar() {
               fontFamily: "monospace",
               fontWeight: 700,
               letterSpacing: ".3rem",
-              color: "inherit",
+              color: scrolled ? "#000" : "#fff",
               textDecoration: "none",
             }}
           >
@@ -120,11 +165,30 @@ function Navbar() {
           >
             {pages.map((page) => (
               <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "white", display: "block" }}
+                key={page.id}
+                onClick={() => {
+                  navigate(page.path);
+                  handleCloseNavMenu();
+                }}
+                sx={{
+                  my: 2,
+                  color: scrolled ? "#000" : "#fff",
+                  display: "block",
+                  borderRadius: "0px",
+                  borderBottom: scrolled
+                    ? location.pathname === page.path
+                      ? "1px solid #000"
+                      : "1px solid transparent"
+                    : location.pathname === page.path
+                    ? "1px solid #fff"
+                    : "1px solid transparent",
+                  ":hover": {
+                    borderBottom: "1px solid #fff",
+                    background: "none",
+                  },
+                }}
               >
-                {page}
+                {page.pageName}
               </Button>
             ))}
           </Box>
@@ -139,4 +203,5 @@ function Navbar() {
     </AppBar>
   );
 }
+
 export default Navbar;
