@@ -68,6 +68,7 @@ const Filters: React.FC<FiltersProps> = ({ onFilterChange }) => {
         boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
         borderRadius: "12px",
         border: "1px solid #e0e0e0",
+        height: "100%",
       }}
     >
       <Typography variant="h6" color="primary">

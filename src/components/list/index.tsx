@@ -93,6 +93,7 @@ const UserPosts = () => {
           margin: "auto",
           marginTop: "3rem",
           position: "relative",
+          padding: "0rem 1rem",
         }}
       >
         {!isMobile && <Filters onFilterChange={handleFilterChange} />}

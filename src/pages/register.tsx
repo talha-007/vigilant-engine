@@ -94,14 +94,14 @@ const RegisterPage = () => {
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
-                  padding: "2rem 0rem",
+                  padding: "1rem 0rem",
                   flexDirection: "column",
                 }}
               >
                 <Box>
                   <Typography
                     sx={{
-                      fontSize: { md: "4rem", xs: "2rem" },
+                      fontSize: { md: "3rem", xs: "2rem" },
                       fontWeight: "900",
                       fontFamily: "Montserrat",
                     }}
@@ -114,7 +114,7 @@ const RegisterPage = () => {
                     display: "flex",
                     flexDirection: "column",
                     gap: "1rem",
-                    marginTop: "2rem",
+                    marginTop: "1rem",
                   }}
                 >
                   <Box>
@@ -125,6 +125,9 @@ const RegisterPage = () => {
                       sx={{
                         "& .MuiOutlinedInput-root": {
                           borderRadius: "14px",
+                        },
+                        "& .MuiOutlinedInput-input": {
+                          padding: "7px 14px",
                         },
                       }}
                       slotProps={{
@@ -147,6 +150,9 @@ const RegisterPage = () => {
                         "& .MuiOutlinedInput-root": {
                           borderRadius: "14px",
                         },
+                        "& .MuiOutlinedInput-input": {
+                          padding: "7px 14px",
+                        },
                       }}
                       slotProps={{
                         input: {
@@ -164,9 +170,13 @@ const RegisterPage = () => {
                       Password
                     </Typography>
                     <TextField
+                      type="password"
                       sx={{
                         "& .MuiOutlinedInput-root": {
                           borderRadius: "14px",
+                        },
+                        "& .MuiOutlinedInput-input": {
+                          padding: "7px 14px",
                         },
                       }}
                       slotProps={{
@@ -212,24 +222,24 @@ const RegisterPage = () => {
                   sx={{
                     border: "1px solid #ddd",
                     borderRadius: "6px",
-                    padding: { md: ".4rem 1.4rem ", xs: "0rem 1rem " },
+                    padding: { md: ".4rem 1rem ", xs: "0rem 1rem " },
                     ":hover": { border: "1px solid #000", cursor: "pointer" },
                   }}
                 >
                   <IconButton>
-                    <Iconify width={32} icon="flat-color-icons:google" />
+                    <Iconify width={18} icon="flat-color-icons:google" />
                   </IconButton>
                 </Box>
                 <Box
                   sx={{
                     border: "1px solid #ddd",
                     borderRadius: "6px",
-                    padding: { md: ".4rem 1.4rem ", xs: "0rem 1rem " },
+                    padding: { md: ".4rem 1rem ", xs: "0rem 1rem " },
                     ":hover": { border: "1px solid #000", cursor: "pointer" },
                   }}
                 >
                   <IconButton>
-                    <Iconify width={32} icon="logos:facebook" />
+                    <Iconify width={18} icon="logos:facebook" />
                   </IconButton>
                 </Box>
               </Box>
@@ -237,7 +247,7 @@ const RegisterPage = () => {
                 <Typography
                   sx={{
                     textAlign: "center",
-                    fontSize: { xs: ".7rem", md: "1rem" },
+                    fontSize: { xs: ".5rem", md: ".7rem" },
                   }}
                 >
                   have account?{" "}

@@ -196,7 +196,9 @@ function Navbar() {
             <Button variant="outlined" onClick={() => navigate("/login")}>
               Log In
             </Button>
-            <Button variant="contained">Sign Up</Button>
+            <Button variant="contained" onClick={() => navigate("/register")}>
+              Sign Up
+            </Button>
           </Stack>
         </Toolbar>
       </Container>

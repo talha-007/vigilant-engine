@@ -80,7 +80,7 @@ const EditPost: React.FC<EditPostProps> = ({
       <DialogTitle sx={{ bgcolor: "#f5f5f5", color: "#333" }}>
         Edit Post
       </DialogTitle>
-      <DialogContent>
+      <DialogContent sx={{ mt: 1 }}>
         <TextField
           autoFocus
           label="Title"

@@ -63,7 +63,7 @@ const ChatDrawer: React.FC<ChatDrawerProps> = ({ open, onClose }) => {
           <CloseIcon />
         </IconButton>
       </Box>
-      <Box sx={{ marginTop: 2, height: "400px", overflowY: "auto" }}>
+      <Box sx={{ marginTop: 2, height: "100%", overflowY: "auto" }}>
         <List>
           {chatHistory.map((chat, index) => (
             <ListItem key={index}>
@@ -84,6 +84,14 @@ const ChatDrawer: React.FC<ChatDrawerProps> = ({ open, onClose }) => {
           placeholder="Type your message..."
           value={message}
           onChange={(e) => setMessage(e.target.value)}
+          sx={{
+            "& .MuiOutlinedInput-root": {
+              borderRadius: "10px",
+            },
+            "& .MuiOutlinedInput-input": {
+              padding: "7px 14px",
+            },
+          }}
         />
         <Button variant="contained" color="primary" onClick={handleSendMessage}>
           Send
