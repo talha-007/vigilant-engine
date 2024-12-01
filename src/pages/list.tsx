@@ -7,7 +7,7 @@ const List: React.FC = () => {
     <>
       <Box
         sx={{
-          minHeight: "80vh",
+          minHeight: { md: "80vh", xs: "60vh" },
           backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.5)), url(${homebg})`,
           backgroundRepeat: "no-repeat",
           backgroundPosition: "center",

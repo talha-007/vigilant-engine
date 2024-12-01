@@ -33,6 +33,7 @@ const SearchComponent: React.FC<SearchComponentProps> = ({ places }) => {
         margin: "auto",
         transform: "translate(0,-50%)",
         padding: "2rem",
+        marginTop: { xs: "2rem", md: "0rem" },
       }}
     >
       <Grid container spacing={2}>
@@ -43,7 +44,7 @@ const SearchComponent: React.FC<SearchComponentProps> = ({ places }) => {
           <Autocomplete
             options={places}
             value={to}
-            onChange={(event, newValue) => setTo(newValue || "")}
+            onChange={(newValue) => setTo(newValue || "")}
             renderInput={(params) => (
               <TextField {...params} variant="outlined" />
             )}

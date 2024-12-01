@@ -130,7 +130,7 @@ function Navbar() {
                   <Typography
                     sx={{
                       textAlign: "center",
-                      color: scrolled ? "#000" : "#fff",
+                      color: "#000",
                     }}
                   >
                     {page.pageName}
