@@ -12,9 +12,84 @@ import loginImg from "../assets/login.png";
 import Iconify from "../components/iconify";
 import vector1 from "../assets/Vector1.png";
 import vector2 from "../assets/vector2.png";
-import vector3 from "../assets/vector3.png";
-
+import vector3 from "../assets/Vector3.png";
+import { useState } from "react";
+import authServices from "../redux/api/authService";
+const initialValues = {
+  email: "",
+  password: "",
+};
 const LoginPage = () => {
+  const [values, setValues] = useState(initialValues);
+  const [showPassword, setShowPassword] = useState(false);
+
+  const [errors, setErrors] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleOnChange = (e) => {
+    const { name, value } = e.target;
+
+    // If the input is of type 'file', store the file(s)
+    const newValue = value;
+
+    setValues({
+      ...values,
+      [name]: newValue,
+    });
+
+    // Call validations (exclude file validations if not needed)
+    validations({
+      [name]: newValue,
+    });
+  };
+
+  const validations = (fieldValue = values) => {
+    const temp = { ...errors };
+
+    // Email validation (format and required)
+    if ("email" in fieldValue) {
+      temp.email = fieldValue.email
+        ? /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(fieldValue.email)
+          ? ""
+          : "Please enter a valid email address"
+        : "Email is required";
+    }
+
+    // Password validation (minimum length and required)
+    if ("password" in fieldValue) {
+      temp.password = fieldValue.password
+        ? fieldValue.password.length >= 6
+          ? ""
+          : "Password must be at least 6 characters long"
+        : "Password is required";
+    }
+
+    setErrors({
+      ...temp,
+    });
+
+    // Return true if all errors are empty
+    return Object.values(temp).every((x) => x === "");
+  };
+
+  const handleSubmit = async () => {
+    try {
+      const datas = {
+        email: values.email,
+        password: values.password,
+      };
+      console.log("datas", datas);
+      if (validations()) {
+        setIsLoading(true);
+        const res = await authServices.login(datas);
+        console.log("res", res);
+        setIsLoading(false);
+      }
+    } catch (error) {
+      console.log(error);
+      setIsLoading(false);
+    }
+  };
   return (
     <Box sx={{ overflow: "hidden" }}>
       <Box
@@ -130,21 +205,18 @@ const LoginPage = () => {
                       Email
                     </Typography>
                     <TextField
+                      fullWidth
+                      name="email"
+                      helperText={errors?.email}
+                      value={values?.email}
+                      error={Boolean(errors?.email)}
+                      onChange={handleOnChange}
                       sx={{
                         "& .MuiOutlinedInput-root": {
                           borderRadius: "14px",
                         },
                         "& .MuiOutlinedInput-input": {
                           padding: "7px 14px",
-                        },
-                      }}
-                      slotProps={{
-                        input: {
-                          startAdornment: (
-                            <InputAdornment position="start">
-                              <Iconify icon="mage:email" />
-                            </InputAdornment>
-                          ),
                         },
                       }}
                     />
@@ -154,6 +226,13 @@ const LoginPage = () => {
                       Password
                     </Typography>
                     <TextField
+                      fullWidth
+                      name="password"
+                      helperText={errors?.password}
+                      value={values?.password}
+                      error={Boolean(errors?.password)}
+                      type={showPassword ? "text" : "password"}
+                      onChange={handleOnChange}
                       sx={{
                         "& .MuiOutlinedInput-root": {
                           borderRadius: "14px",
@@ -164,9 +243,20 @@ const LoginPage = () => {
                       }}
                       slotProps={{
                         input: {
-                          startAdornment: (
-                            <InputAdornment position="start">
-                              <Iconify icon="solar:password-minimalistic-input-broken" />
+                          endAdornment: (
+                            <InputAdornment position="end">
+                              <IconButton
+                                onClick={() => setShowPassword(!showPassword)}
+                                edge="end"
+                              >
+                                <Iconify
+                                  icon={
+                                    showPassword
+                                      ? "eva:eye-fill"
+                                      : "eva:eye-off-fill"
+                                  }
+                                />
+                              </IconButton>
                             </InputAdornment>
                           ),
                         },
@@ -195,8 +285,9 @@ const LoginPage = () => {
                       marginTop: "1rem",
                       padding: ".6rem 0rem",
                     }}
+                    onClick={handleSubmit}
                   >
-                    Login
+                    {isLoading ? "loading..." : "Sign Up"}
                   </Button>
                 </Box>
               </Box>
