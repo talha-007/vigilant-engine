@@ -12,7 +12,7 @@ import signUpImg from "../assets/signUp.jpg";
 import Iconify from "../components/iconify";
 import vector1 from "../assets/Vector1.png";
 import vector2 from "../assets/vector2.png";
-import vector3 from "../assets/vector3.png";
+import vector3 from "../assets/Vector3.png";
 import { useState } from "react";
 import Grid from "@mui/material/Grid2";
 import authServices from "../redux/api/authService";
