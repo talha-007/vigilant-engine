@@ -4,9 +4,11 @@ interface signup {
   email: string;
   password: string;
   re_password: string;
-  gender: number;
-  phone: number;
-  picture: string;
+  profile: {
+    gender: number;
+    phone: number;
+    picture: string;
+  };
 }
 interface login {
   email: string;

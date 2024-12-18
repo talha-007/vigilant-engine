@@ -91,7 +91,7 @@ const LoginPage = () => {
     }
   };
   return (
-    <Box sx={{ overflow: "hidden" }}>
+    <Box sx={{ overflow: "auto", height: "100vh" }}>
       <Box
         sx={{
           position: "absolute",
@@ -127,15 +127,9 @@ const LoginPage = () => {
         sx={{
           boxShadow: "0px 10px 20px rgba(0,0,0, .2)",
           borderRadius: "12px",
-          margin: "auto",
+          margin: "4rem auto",
           width: { md: "70%", xs: "95%" },
           overflow: "hidden",
-          height: { md: "80vh", xs: "95vh" },
-          minHeight: { md: "80vh", xs: "95vh" },
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%,-50%)",
         }}
       >
         <Grid container sx={{ height: "100%" }}>
@@ -169,7 +163,7 @@ const LoginPage = () => {
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
-                  padding: "1rem 0rem",
+                  padding: "3rem 0rem 0rem",
                   flexDirection: "column",
                 }}
               >
@@ -328,7 +322,7 @@ const LoginPage = () => {
                   </IconButton>
                 </Box>
               </Box>
-              <Box mt={2}>
+              <Box mt={2} mb={4}>
                 <Typography
                   sx={{
                     textAlign: "center",

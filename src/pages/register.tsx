@@ -136,7 +136,7 @@ const RegisterPage = () => {
     }
   };
   return (
-    <Box sx={{ overflow: "hidden" }}>
+    <Box sx={{ overflow: "auto", height: "100vh" }}>
       <Box
         sx={{
           position: "absolute",
@@ -172,18 +172,12 @@ const RegisterPage = () => {
         sx={{
           boxShadow: "0px 10px 20px rgba(0,0,0, .2)",
           borderRadius: "12px",
-          margin: "auto",
+          margin: "4rem auto",
           width: { md: "70%", xs: "95%" },
           overflow: "hidden",
-          height: { md: "80vh", xs: "95vh" },
-          minHeight: { md: "80vh", xs: "95vh" },
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%,-50%)",
         }}
       >
-        <Grid container sx={{ height: "100%" }}>
+        <Grid container>
           <Grid size={{ xs: 0, md: 6 }}>
             <Box
               sx={{
@@ -279,317 +273,364 @@ const RegisterPage = () => {
               justifyContent: "center",
             }}
           >
-            <Box>
-              <Box
-                sx={{
-                  width: "100%",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  padding: "1rem 0rem",
-                  flexDirection: "column",
-                }}
-              >
-                <Grid container spacing={2} sx={{ padding: "0rem 2rem" }}>
-                  <Grid
-                    size={12}
-                    sx={{ justifyContent: "center", display: "flex" }}
+            <Box
+              sx={{
+                width: "100%",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                padding: "3rem 0rem",
+                flexDirection: "column",
+              }}
+            >
+              <Grid container spacing={2} sx={{ padding: "0rem 2rem" }}>
+                <Grid
+                  size={12}
+                  sx={{ justifyContent: "center", display: "flex" }}
+                >
+                  <Box
+                    sx={{
+                      width: "150px",
+                      height: "150px",
+                      background: "#eeeeee",
+                      // boxShadow: '0 6px 24px #f1f1f1',
+                      borderRadius: "10rem",
+                      overflow: "hidden",
+                      border: "1px dashed #999",
+                      margin: "15px auto",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      position: "relative",
+                    }}
+                    onMouseOver={() => setOnMouse(true)}
+                    onMouseOut={() => setOnMouse(false)}
                   >
-                    <Box
-                      sx={{
-                        width: "150px",
-                        height: "150px",
-                        background: "#eeeeee",
-                        // boxShadow: '0 6px 24px #f1f1f1',
-                        borderRadius: "10rem",
-                        overflow: "hidden",
-                        border: "1px dashed #999",
-                        margin: "15px auto",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        position: "relative",
-                      }}
-                      onMouseOver={() => setOnMouse(true)}
-                      onMouseOut={() => setOnMouse(false)}
-                    >
-                      {menuItemImg ? (
-                        <img
-                          src={
-                            menuItemImg instanceof Blob
-                              ? URL.createObjectURL(menuItemImg)
-                              : `${IMAGE_BASEURL}${menuItemImg}`
-                          }
-                          alt="menuItemImg"
-                          style={{
-                            width: "100%",
-                            height: "100%",
-                            objectFit: "cover",
-                          }}
-                        />
-                      ) : (
-                        <Box
-                          sx={{
-                            position: "absolute",
-                            background: "#8888885c",
-                            width: "150px",
-                            height: "150px",
-                            top: "0px",
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                          }}
-                        >
-                          <label htmlFor="menuItemImg">
-                            {" "}
-                            <Iconify
-                              width={40}
-                              icon="material-symbols-light:upload-rounded"
-                            />
-                          </label>
-
-                          <input
-                            type="file"
-                            id="menuItemImg"
-                            name="menuItemImg"
-                            value=""
-                            onChange={handleFileChange}
-                            style={{ display: "none" }}
+                    {menuItemImg ? (
+                      <img
+                        src={
+                          menuItemImg instanceof Blob
+                            ? URL.createObjectURL(menuItemImg)
+                            : `${IMAGE_BASEURL}${menuItemImg}`
+                        }
+                        alt="menuItemImg"
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
+                        }}
+                      />
+                    ) : (
+                      <Box
+                        sx={{
+                          position: "absolute",
+                          background: "#8888885c",
+                          width: "150px",
+                          height: "150px",
+                          top: "0px",
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                        <label htmlFor="menuItemImg">
+                          {" "}
+                          <Iconify
+                            width={40}
+                            icon="material-symbols-light:upload-rounded"
                           />
-                        </Box>
-                      )}
-                      {/* {!menuItemImg && (
+                        </label>
+
+                        <input
+                          type="file"
+                          id="menuItemImg"
+                          name="menuItemImg"
+                          value=""
+                          onChange={handleFileChange}
+                          style={{ display: "none" }}
+                        />
+                      </Box>
+                    )}
+                    {/* {!menuItemImg && (
                         <label htmlFor="menuItemImg">Click to upload</label>
                       )} */}
-                      {onMouse && (
-                        <Box
-                          sx={{
-                            position: "absolute",
-                            background: "#8888885c",
-                            width: "150px",
-                            height: "150px",
-                            top: "0px",
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                          }}
-                        >
-                          <label htmlFor="menuItemImg">
-                            {" "}
-                            <Iconify
-                              width={40}
-                              icon="material-symbols-light:upload-rounded"
-                            />
-                          </label>
-
-                          <input
-                            type="file"
-                            id="menuItemImg"
-                            name="menuItemImg"
-                            value=""
-                            onChange={handleFileChange}
-                            style={{ display: "none" }}
+                    {onMouse && (
+                      <Box
+                        sx={{
+                          position: "absolute",
+                          background: "#8888885c",
+                          width: "150px",
+                          height: "150px",
+                          top: "0px",
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                        <label htmlFor="menuItemImg">
+                          {" "}
+                          <Iconify
+                            width={40}
+                            icon="material-symbols-light:upload-rounded"
                           />
-                        </Box>
-                      )}
-                    </Box>{" "}
-                    <input
-                      type="file"
-                      id="menuItemImg"
-                      name="menuItemImg"
-                      value=""
-                      onChange={handleFileChange}
-                      style={{ display: "none" }}
-                    />
-                  </Grid>
-                  <Grid size={{ xs: 12 }}>
-                    <Box>
-                      <Typography
-                        sx={{ paddingLeft: "10px", fontSize: "14px" }}
-                      >
-                        Email
-                      </Typography>
-                      <TextField
-                        fullWidth
-                        name="email"
-                        helperText={errors?.email}
-                        value={values?.email}
-                        error={Boolean(errors?.email)}
-                        onChange={handleOnChange}
-                        sx={{
-                          "& .MuiOutlinedInput-root": {
-                            borderRadius: "14px",
-                          },
-                          "& .MuiOutlinedInput-input": {
-                            padding: "7px 14px",
-                          },
-                        }}
-                      />
-                    </Box>
-                  </Grid>
-                  <Grid size={{ xs: 12, md: 6 }}>
-                    <Box>
-                      <Typography
-                        sx={{ paddingLeft: "10px", fontSize: "14px" }}
-                      >
-                        Password
-                      </Typography>
-                      <TextField
-                        fullWidth
-                        name="password"
-                        helperText={errors?.password}
-                        value={values?.password}
-                        error={Boolean(errors?.password)}
-                        type={showPassword ? "text" : "password"}
-                        onChange={handleOnChange}
-                        sx={{
-                          "& .MuiOutlinedInput-root": {
-                            borderRadius: "14px",
-                          },
-                          "& .MuiOutlinedInput-input": {
-                            padding: "7px 14px",
-                          },
-                        }}
-                        slotProps={{
-                          input: {
-                            endAdornment: (
-                              <InputAdornment position="end">
-                                <IconButton
-                                  onClick={() => setShowPassword(!showPassword)}
-                                  edge="end"
-                                >
-                                  <Iconify
-                                    icon={
-                                      showPassword
-                                        ? "eva:eye-fill"
-                                        : "eva:eye-off-fill"
-                                    }
-                                  />
-                                </IconButton>
-                              </InputAdornment>
-                            ),
-                          },
-                        }}
-                      />
-                    </Box>
-                  </Grid>
-                  <Grid size={{ xs: 12, md: 6 }}>
-                    <Box>
-                      <Typography
-                        sx={{ paddingLeft: "10px", fontSize: "14px" }}
-                      >
-                        Confirm Password
-                      </Typography>
-                      <TextField
-                        fullWidth
-                        name="re_password"
-                        helperText={errors?.re_password}
-                        value={values?.re_password}
-                        error={Boolean(errors?.re_password)}
-                        type={showConfirmPassword ? "text" : "password"}
-                        onChange={handleOnChange}
-                        sx={{
-                          "& .MuiOutlinedInput-root": {
-                            borderRadius: "14px",
-                          },
-                          "& .MuiOutlinedInput-input": {
-                            padding: "7px 14px",
-                          },
-                        }}
-                        slotProps={{
-                          input: {
-                            endAdornment: (
-                              <InputAdornment position="end">
-                                <IconButton
-                                  onClick={() =>
-                                    setShowConfirmPassword(!showConfirmPassword)
-                                  }
-                                  edge="end"
-                                >
-                                  <Iconify
-                                    icon={
-                                      showConfirmPassword
-                                        ? "eva:eye-fill"
-                                        : "eva:eye-off-fill"
-                                    }
-                                  />
-                                </IconButton>
-                              </InputAdornment>
-                            ),
-                          },
-                        }}
-                      />
-                    </Box>
-                  </Grid>
-                  <Grid size={{ xs: 12, md: 6 }}>
-                    <Box>
-                      <Typography
-                        sx={{ paddingLeft: "10px", fontSize: "14px" }}
-                      >
-                        Gender
-                      </Typography>
-                      <TextField
-                        select
-                        fullWidth
-                        name="gender"
-                        helperText={errors?.gender}
-                        value={values?.gender}
-                        error={Boolean(errors?.gender)}
-                        onChange={handleOnChange}
-                        sx={{
-                          "& .MuiOutlinedInput-root": {
-                            borderRadius: "14px",
-                          },
-                          "& .MuiOutlinedInput-input": {
-                            padding: "7px 14px",
-                          },
-                        }}
-                      >
-                        <MenuItem value="1">Male</MenuItem>
-                        <MenuItem value="0">Female</MenuItem>
-                      </TextField>
-                    </Box>
-                  </Grid>
-                  <Grid size={{ xs: 12, md: 6 }}>
-                    <Box>
-                      <Typography
-                        sx={{ paddingLeft: "10px", fontSize: "14px" }}
-                      >
-                        Phone Number
-                      </Typography>
-                      <TextField
-                        fullWidth
-                        name="phone"
-                        helperText={errors?.phone}
-                        value={values?.phone}
-                        error={Boolean(errors?.phone)}
-                        onChange={handleOnChange}
-                        sx={{
-                          "& .MuiOutlinedInput-root": {
-                            borderRadius: "14px",
-                          },
-                          "& .MuiOutlinedInput-input": {
-                            padding: "7px 14px",
-                          },
-                        }}
-                      />
-                    </Box>
-                  </Grid>
+                        </label>
+
+                        <input
+                          type="file"
+                          id="menuItemImg"
+                          name="menuItemImg"
+                          value=""
+                          onChange={handleFileChange}
+                          style={{ display: "none" }}
+                        />
+                      </Box>
+                    )}
+                  </Box>{" "}
+                  <input
+                    type="file"
+                    id="menuItemImg"
+                    name="menuItemImg"
+                    value=""
+                    onChange={handleFileChange}
+                    style={{ display: "none" }}
+                  />
                 </Grid>
-                <Box>
-                  <Button
-                    onClick={handleSubmit}
-                    variant="contained"
-                    fullWidth
+                <Grid size={{ xs: 12 }}>
+                  <Box>
+                    <Typography sx={{ paddingLeft: "10px", fontSize: "14px" }}>
+                      Email
+                    </Typography>
+                    <TextField
+                      fullWidth
+                      name="email"
+                      helperText={errors?.email}
+                      value={values?.email}
+                      error={Boolean(errors?.email)}
+                      onChange={handleOnChange}
+                      sx={{
+                        "& .MuiOutlinedInput-root": {
+                          borderRadius: "14px",
+                        },
+                        "& .MuiOutlinedInput-input": {
+                          padding: "7px 14px",
+                        },
+                      }}
+                    />
+                  </Box>
+                </Grid>
+                <Grid size={{ xs: 12, md: 6 }}>
+                  <Box>
+                    <Typography sx={{ paddingLeft: "10px", fontSize: "14px" }}>
+                      Password
+                    </Typography>
+                    <TextField
+                      fullWidth
+                      name="password"
+                      helperText={errors?.password}
+                      value={values?.password}
+                      error={Boolean(errors?.password)}
+                      type={showPassword ? "text" : "password"}
+                      onChange={handleOnChange}
+                      sx={{
+                        "& .MuiOutlinedInput-root": {
+                          borderRadius: "14px",
+                        },
+                        "& .MuiOutlinedInput-input": {
+                          padding: "7px 14px",
+                        },
+                      }}
+                      slotProps={{
+                        input: {
+                          endAdornment: (
+                            <InputAdornment position="end">
+                              <IconButton
+                                onClick={() => setShowPassword(!showPassword)}
+                                edge="end"
+                              >
+                                <Iconify
+                                  icon={
+                                    showPassword
+                                      ? "eva:eye-fill"
+                                      : "eva:eye-off-fill"
+                                  }
+                                />
+                              </IconButton>
+                            </InputAdornment>
+                          ),
+                        },
+                      }}
+                    />
+                  </Box>
+                </Grid>
+                <Grid size={{ xs: 12, md: 6 }}>
+                  <Box>
+                    <Typography sx={{ paddingLeft: "10px", fontSize: "14px" }}>
+                      Confirm Password
+                    </Typography>
+                    <TextField
+                      fullWidth
+                      name="re_password"
+                      helperText={errors?.re_password}
+                      value={values?.re_password}
+                      error={Boolean(errors?.re_password)}
+                      type={showConfirmPassword ? "text" : "password"}
+                      onChange={handleOnChange}
+                      sx={{
+                        "& .MuiOutlinedInput-root": {
+                          borderRadius: "14px",
+                        },
+                        "& .MuiOutlinedInput-input": {
+                          padding: "7px 14px",
+                        },
+                      }}
+                      slotProps={{
+                        input: {
+                          endAdornment: (
+                            <InputAdornment position="end">
+                              <IconButton
+                                onClick={() =>
+                                  setShowConfirmPassword(!showConfirmPassword)
+                                }
+                                edge="end"
+                              >
+                                <Iconify
+                                  icon={
+                                    showConfirmPassword
+                                      ? "eva:eye-fill"
+                                      : "eva:eye-off-fill"
+                                  }
+                                />
+                              </IconButton>
+                            </InputAdornment>
+                          ),
+                        },
+                      }}
+                    />
+                  </Box>
+                </Grid>
+                <Grid size={{ xs: 12, md: 6 }}>
+                  <Box>
+                    <Typography sx={{ paddingLeft: "10px", fontSize: "14px" }}>
+                      Gender
+                    </Typography>
+                    <TextField
+                      select
+                      fullWidth
+                      name="gender"
+                      helperText={errors?.gender}
+                      value={values?.gender}
+                      error={Boolean(errors?.gender)}
+                      onChange={handleOnChange}
+                      sx={{
+                        "& .MuiOutlinedInput-root": {
+                          borderRadius: "14px",
+                        },
+                        "& .MuiOutlinedInput-input": {
+                          padding: "7px 14px",
+                        },
+                      }}
+                    >
+                      <MenuItem value="1">Male</MenuItem>
+                      <MenuItem value="0">Female</MenuItem>
+                    </TextField>
+                  </Box>
+                </Grid>
+                <Grid size={{ xs: 12, md: 6 }}>
+                  <Box>
+                    <Typography sx={{ paddingLeft: "10px", fontSize: "14px" }}>
+                      Phone Number
+                    </Typography>
+                    <TextField
+                      fullWidth
+                      name="phone"
+                      helperText={errors?.phone}
+                      value={values?.phone}
+                      error={Boolean(errors?.phone)}
+                      onChange={handleOnChange}
+                      sx={{
+                        "& .MuiOutlinedInput-root": {
+                          borderRadius: "14px",
+                        },
+                        "& .MuiOutlinedInput-input": {
+                          padding: "7px 14px",
+                        },
+                      }}
+                    />
+                  </Box>
+                </Grid>
+              </Grid>
+              <Box>
+                <Button
+                  onClick={handleSubmit}
+                  variant="contained"
+                  fullWidth
+                  sx={{
+                    minWidth: "232px",
+                    borderRadius: "14px",
+                    marginTop: "1rem",
+                    padding: ".6rem 0rem",
+                  }}
+                >
+                  {isLoading ? "loading..." : "Sign Up"}
+                </Button>
+              </Box>
+              <Box
+                sx={{
+                  padding: { md: "0rem 10rem", xs: "0rem 1rem" },
+                  display: { xs: "block", md: "none" },
+                }}
+              >
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "10px",
+                    justifyContent: "center",
+                    marginTop: "1rem",
+                  }}
+                >
+                  <Box
                     sx={{
-                      minWidth: "232px",
-                      borderRadius: "14px",
-                      marginTop: "1rem",
-                      padding: ".6rem 0rem",
+                      border: "1px solid #ddd",
+                      borderRadius: "6px",
+                      padding: { md: ".4rem 1rem ", xs: "0rem 1rem " },
+                      ":hover": { border: "1px solid #000", cursor: "pointer" },
                     }}
                   >
-                    {isLoading ? "loading..." : "Sign Up"}
-                  </Button>
+                    <IconButton>
+                      <Iconify width={18} icon="flat-color-icons:google" />
+                    </IconButton>
+                  </Box>
+                  <Box
+                    sx={{
+                      border: "1px solid #ddd",
+                      borderRadius: "6px",
+                      padding: { md: ".4rem 1rem ", xs: "0rem 1rem " },
+                      ":hover": { border: "1px solid #000", cursor: "pointer" },
+                    }}
+                  >
+                    <IconButton>
+                      <Iconify width={18} icon="logos:facebook" />
+                    </IconButton>
+                  </Box>
+                </Box>
+                <Box mt={2}>
+                  <Typography
+                    sx={{
+                      textAlign: "center",
+                      fontSize: { xs: ".5rem", md: ".7rem" },
+                    }}
+                  >
+                    have account?{" "}
+                    <span>
+                      <a
+                        style={{ textDecoration: "none", color: "blue" }}
+                        href="/login"
+                      >
+                        Login Now
+                      </a>
+                    </span>
+                  </Typography>
                 </Box>
               </Box>
             </Box>
