@@ -10,7 +10,12 @@ interface CreatePost {
 }
 
 const getAllPosts = () => callAPi.get("/reisapp/posts/");
-const getPost = (id) => callAPi.get(`/reisapp/posts/${id}`);
+const getPost = (id: number) => callAPi.get(`/reisapp/posts/${id}`);
+const getAllCountries = () => callAPi.get("/reisapp/countries/");
+const filterCountryByName = (key: string) =>
+  callAPi.get(`reisapp/countries/?name__startswith=${key}`);
+const filterCountryById = (id: number) =>
+  callAPi.get(`reisapp/cities/?country=${id}`);
 const createPost = (data: CreatePost) =>
   callAPiMultiPart.post(`/reisapp/posts/`, data);
 
@@ -18,5 +23,8 @@ const postServices = {
   getAllPosts,
   getPost,
   createPost,
+  getAllCountries,
+  filterCountryById,
+  filterCountryByName,
 };
 export default postServices;

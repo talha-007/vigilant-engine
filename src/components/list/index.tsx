@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Card,
   CardContent,
@@ -20,8 +20,11 @@ import Filters from "../filters";
 import AddPost from "../dialogs/addPost";
 import EditPost from "../dialogs/editPost";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { get_AllCountries } from "../../redux/slice/filterSlice";
 
 const UserPosts = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const isMobile = useMediaQuery("(max-width: 960px)");
   const [page, setPage] = useState(1);
@@ -36,7 +39,13 @@ const UserPosts = () => {
     postalCode: "",
     gender: "",
   });
-
+  const getCountries = useSelector((state) => {
+    state;
+  });
+  console.log("getAllCountries", getCountries);
+  useEffect(() => {
+    dispatch(get_AllCountries());
+  }, []);
   const filteredPosts = postsData.filter((post) => {
     const { country, city, postalCode, gender } = filters;
 
