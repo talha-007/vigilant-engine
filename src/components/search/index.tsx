@@ -44,7 +44,7 @@ const SearchComponent: React.FC<SearchComponentProps> = ({ places }) => {
           <Autocomplete
             options={places}
             value={to}
-            onChange={(newValue) => setTo(newValue || "")}
+            onChange={(event, newValue) => setTo(newValue || "")}
             renderInput={(params) => (
               <TextField {...params} variant="outlined" />
             )}
