@@ -10,8 +10,12 @@ import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
-import { Stack } from "@mui/material";
+import { Avatar, Divider, Stack, Tooltip } from "@mui/material";
 import { useNavigate, useLocation } from "react-router-dom";
+import Cookies from "js-cookie";
+import { useDispatch, useSelector } from "react-redux";
+import { get_profile } from "../../redux/slice/profileSlice";
+import { toast } from "react-toastify";
 
 const pages = [
   { id: 1, pageName: "Home", path: "/" },
@@ -21,18 +25,41 @@ const pages = [
 
 function Navbar() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const location = useLocation();
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
+  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
+    null
+  );
   const [scrolled, setScrolled] = React.useState(false);
 
+  const profile = useSelector((s) => s?.profile);
+
+  console.log("profile", profile);
+  React.useEffect(() => {
+    dispatch(get_profile());
+  }, []);
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
   };
+  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElUser(event.currentTarget);
+  };
 
+  const accessToken = Cookies.get("accessToken");
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
+  };
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
+  const handleLogout = () => {
+    setAnchorElUser(null);
+    Cookies.remove("accessToken", { path: "/" });
+    Cookies.remove("refreshToken", { path: "/" });
+    toast.success("Logout successful");
   };
 
   React.useEffect(() => {
@@ -192,14 +219,61 @@ function Navbar() {
               </Button>
             ))}
           </Box>
-          <Stack spacing={2} direction={"row"}>
-            <Button variant="outlined" onClick={() => navigate("/login")}>
-              Log In
-            </Button>
-            <Button variant="contained" onClick={() => navigate("/register")}>
-              Sign Up
-            </Button>
-          </Stack>
+          {accessToken ? (
+            <Box sx={{ flexGrow: 0 }}>
+              <Tooltip>
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <Avatar
+                    alt={profile?.profile?.name}
+                    src={profile?.profile?.profile?.picture}
+                  />
+                </IconButton>
+              </Tooltip>
+              <Menu
+                sx={{ mt: "45px", width: "250px" }}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+              >
+                <MenuItem>
+                  <Typography sx={{ textAlign: "center" }}>
+                    {profile?.profile?.name || "N/A"}
+                  </Typography>
+                </MenuItem>
+                <MenuItem>
+                  <Typography sx={{ textAlign: "center" }}>
+                    {" "}
+                    {profile?.profile?.email || "N/A"}
+                  </Typography>
+                </MenuItem>
+                <Divider />
+                <MenuItem onClick={handleLogout}>
+                  <Typography sx={{ textAlign: "center", color: "red" }}>
+                    Logout
+                  </Typography>
+                </MenuItem>
+              </Menu>
+            </Box>
+          ) : (
+            <Stack spacing={2} direction={"row"}>
+              <Button variant="outlined" onClick={() => navigate("/login")}>
+                Log In
+              </Button>
+              <Button variant="contained" onClick={() => navigate("/register")}>
+                Sign Up
+              </Button>
+            </Stack>
+          )}
         </Toolbar>
       </Container>
     </AppBar>

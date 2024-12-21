@@ -9,19 +9,25 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
+interface Place {
+  id: string;
+  name: string;
+}
+
 interface SearchComponentProps {
-  places: string[];
+  places: Place[]; // Update the type of places
 }
 
 const SearchComponent: React.FC<SearchComponentProps> = ({ places }) => {
-  const [to, setTo] = React.useState<string>("");
+  const [to, setTo] = React.useState<string>(""); // Store the selected place ID
   const navigate = useNavigate();
 
   const handleSearch = () => {
     if (to) {
-      navigate(`/list`);
+      navigate(`/list?to=${to}`); // Pass the ID in the query params
     }
   };
+  console.log("places", places);
 
   return (
     <Box
@@ -43,10 +49,15 @@ const SearchComponent: React.FC<SearchComponentProps> = ({ places }) => {
           </Typography>
           <Autocomplete
             options={places}
-            value={to}
-            onChange={(event, newValue) => setTo(newValue || "")}
+            getOptionLabel={(option) => option?.name} // Display the name
+            value={places?.find((place) => place?.id === to) || null} // Match ID to set the selected value
+            onChange={(event, newValue) => setTo(newValue ? newValue?.id : "")}
             renderInput={(params) => (
-              <TextField {...params} variant="outlined" />
+              <TextField
+                {...params}
+                variant="outlined"
+                placeholder="Select a place"
+              />
             )}
           />
         </Grid>

@@ -15,11 +15,15 @@ import vector2 from "../assets/vector2.png";
 import vector3 from "../assets/Vector3.png";
 import { useState } from "react";
 import authServices from "../redux/api/authService";
+import { toast } from "react-toastify";
+import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
 const initialValues = {
   email: "",
   password: "",
 };
 const LoginPage = () => {
+  const navigate = useNavigate();
   const [values, setValues] = useState(initialValues);
   const [showPassword, setShowPassword] = useState(false);
 
@@ -83,10 +87,25 @@ const LoginPage = () => {
         setIsLoading(true);
         const res = await authServices.login(datas);
         console.log("res", res);
-        setIsLoading(false);
+        if (res.status === 200) {
+          Cookies.set("accessToken", res.data.access, {
+            path: "/",
+            secure: true,
+            sameSite: "strict",
+          });
+          Cookies.set("refreshToken", res.data.refresh, {
+            path: "/",
+            secure: true,
+            sameSite: "strict",
+          });
+          toast.success("Login successful");
+          navigate("/");
+          setIsLoading(false);
+        }
       }
     } catch (error) {
       console.log(error);
+      toast.error(error?.response?.data?.errors[0]?.detail);
       setIsLoading(false);
     }
   };

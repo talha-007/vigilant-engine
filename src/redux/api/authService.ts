@@ -1,4 +1,4 @@
-import { callAPiMultiPart } from "./http-common";
+import { callAPi, callAPiMultiPart } from "./http-common";
 
 interface signup {
   email: string;
@@ -16,9 +16,11 @@ interface login {
 }
 const signUp = (data: signup) => callAPiMultiPart.post("auth/users/", data);
 const login = (data: login) => callAPiMultiPart.post("auth/jwt/create/", data);
+const getProfile = () => callAPi.get("auth/users/me");
 
 const authServices = {
   signUp,
   login,
+  getProfile,
 };
 export default authServices;

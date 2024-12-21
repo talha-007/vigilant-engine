@@ -22,6 +22,7 @@ import EditPost from "../dialogs/editPost";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { get_AllCountries } from "../../redux/slice/filterSlice";
+import { get_AllPosts } from "../../redux/slice/postsSlice";
 
 const UserPosts = () => {
   const dispatch = useDispatch();
@@ -31,7 +32,8 @@ const UserPosts = () => {
   const [openAddPostDialogue, setOpenAddPostDialogue] = useState(false);
   const [openEditPostDialogue, setOpenEditPostDialogue] = useState(false);
   const [editingPost, setEditingPost] = useState(null); // To hold the post being edited
-  const [filtersOpen, setFiltersOpen] = useState(false); // For toggling filters
+  const [filtersOpen, setFiltersOpen] = useState(false);
+  const [refetch, setRefetch] = useState(false); // For toggling filters
   const postsPerPage = 6;
   const [filters, setFilters] = React.useState<FilterState>({
     country: "",
@@ -39,13 +41,13 @@ const UserPosts = () => {
     postalCode: "",
     gender: "",
   });
-  const getCountries = useSelector((state) => {
-    state;
-  });
-  console.log("getAllCountries", getCountries);
+  const getCountries = useSelector((state) => state.filter);
+  const Posts = useSelector((state) => state.posts);
+  console.log("getAllCountries", Posts);
   useEffect(() => {
     dispatch(get_AllCountries());
-  }, []);
+    dispatch(get_AllPosts());
+  }, [refetch]);
   const filteredPosts = postsData.filter((post) => {
     const { country, city, postalCode, gender } = filters;
 
@@ -105,7 +107,9 @@ const UserPosts = () => {
           padding: "0rem 1rem",
         }}
       >
-        {!isMobile && <Filters onFilterChange={handleFilterChange} />}
+        {!isMobile && (
+          <Filters onFilterChange={handleFilterChange} data={Posts} />
+        )}
         {isMobile && (
           <>
             <IconButton
@@ -161,8 +165,8 @@ const UserPosts = () => {
             </Button>
           </Box>
           <Grid container spacing={3} sx={{ padding: 3 }}>
-            {currentPosts.length > 0 ? (
-              currentPosts.map((post) => (
+            {Posts?.data?.length > 0 ? (
+              Posts?.data?.map((post) => (
                 <Grid item xs={12} sm={6} md={4} key={post.id}>
                   <Card
                     sx={{
@@ -196,6 +200,7 @@ const UserPosts = () => {
                           color: "#fff",
                           fontSize: "1.25rem",
                         }}
+                        src={post?.posted_by?.picture}
                       >
                         {post.place?.charAt(0).toUpperCase()}
                       </Avatar>
@@ -225,12 +230,16 @@ const UserPosts = () => {
                         <strong>Traveling to:</strong> {post.place}
                       </Typography>
                       <Typography variant="body2" sx={{ color: "#555" }}>
-                        <strong>Dates:</strong> {post.departure}{" "}
-                        <strong>-</strong> {post.return}
+                        <strong>Dates:</strong> {post?.date_from}{" "}
+                        <strong>-</strong> {post?.date_to}
                       </Typography>
                       <Typography variant="body2" sx={{ color: "#555" }}>
                         <strong>Details:</strong>{" "}
-                        {post.details || "No details provided."}
+                        <div
+                          dangerouslySetInnerHTML={{
+                            __html: post.text,
+                          }}
+                        />
                       </Typography>
                       <Typography variant="body2" sx={{ color: "#555" }}>
                         <strong>Gender:</strong> {post.gender}
@@ -311,6 +320,9 @@ const UserPosts = () => {
       <AddPost
         open={openAddPostDialogue}
         onClose={handleCloseAddPostDialogue}
+        getCountries={getCountries}
+        setRefetch={setRefetch}
+        refetch={refetch}
       />
 
       <EditPost

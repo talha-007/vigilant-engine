@@ -1,12 +1,18 @@
 import { Box, Typography } from "@mui/material";
 import homebg from "../assets/homebg.jpg";
-import React from "react";
-import postsData from "../components/list/data";
+import React, { useEffect } from "react";
 import SearchComponent from "../components/search";
+import { get_AllCountries } from "../redux/slice/filterSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const HomePage: React.FC = () => {
-  const places = Array.from(new Set(postsData.map((post) => post.place))); // This ensures no duplicate places are in the list
-
+  const dispatch = useDispatch();
+  const getCountries = useSelector((state) => state.filter);
+  console.log("getAllCountries", getCountries);
+  useEffect(() => {
+    dispatch(get_AllCountries());
+  }, []);
+  const places = getCountries?.data || [];
   return (
     <>
       <Box

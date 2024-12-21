@@ -1,12 +1,11 @@
 import axios from "axios";
-
+import Cookies from "js-cookie";
 export const API_URL = "https://api.zusammenreisen.com/api";
 export const IMAGE_BASEURL = "https://api.zusammenreisen.com/api";
 // export const API_URL = 'https://api.membersverify.com/';
 // export const IMAGE_BASEURL = 'https://api.membersverify.com/';
 
 export const callAPi = axios.create({
-  withCredentials: true,
   baseURL: API_URL,
   headers: {
     "Content-type": "application/json",
@@ -22,9 +21,9 @@ export const callAPiMultiPart = axios.create({
 
 callAPiMultiPart.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("token");
-    if (token && token !== undefined) {
-      config.headers.Authorization = `Bearer ${token}`;
+    const accessToken = Cookies.get("accessToken");
+    if (accessToken && accessToken !== undefined) {
+      config.headers.Authorization = `JWT ${accessToken}`;
     }
     return config;
   },
@@ -33,9 +32,9 @@ callAPiMultiPart.interceptors.request.use(
 
 callAPi.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("token");
-    if (token && token !== undefined) {
-      config.headers.Authorization = `Bearer ${token}`;
+    const accessToken = Cookies.get("accessToken");
+    if (accessToken && accessToken !== undefined) {
+      config.headers.Authorization = `JWT ${accessToken}`;
     }
     return config;
   },

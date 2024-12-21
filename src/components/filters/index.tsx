@@ -10,23 +10,33 @@ import {
   InputLabel,
 } from "@mui/material";
 import { FilterState } from "../../types";
-import postsData from "../list/data";
 
 interface FiltersProps {
   onFilterChange: (filters: FilterState) => void;
+  data: { data: any[] };
 }
 
-const Filters: React.FC<FiltersProps> = ({ onFilterChange }) => {
+const Filters: React.FC<FiltersProps> = ({ onFilterChange, data }) => {
+  const posts = data?.data || [];
+
+  // Extract unique filter options
   const countries = Array.from(
-    new Set(postsData?.map((post: { country: string }) => post.country))
+    new Set(posts.map((post) => post.travel_to_country).filter(Boolean))
   );
   const cities = Array.from(
-    new Set(postsData?.map((post: { place: string }) => post.place))
+    new Set(posts.map((post) => post.travel_to_city).filter(Boolean))
   );
   const genders = Array.from(
-    new Set(postsData?.map((post: { gender: string }) => post.gender))
+    new Set(
+      posts
+        .map((post) =>
+          post.posted_by?.gender !== undefined ? post.posted_by.gender : null
+        )
+        .filter((gender) => gender !== null)
+    )
   );
 
+  // Initialize filter state
   const [filters, setFilters] = useState<FilterState>({
     country: "",
     city: "",
@@ -122,7 +132,7 @@ const Filters: React.FC<FiltersProps> = ({ onFilterChange }) => {
           <MenuItem value="">All Genders</MenuItem>
           {genders.map((gender) => (
             <MenuItem key={gender} value={gender}>
-              {gender}
+              {gender === 0 ? "Male" : "Female"}
             </MenuItem>
           ))}
         </Select>

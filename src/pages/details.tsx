@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Box,
   Typography,
@@ -11,15 +11,23 @@ import {
 } from "@mui/material";
 import { useParams, useNavigate } from "react-router-dom";
 import postsData from "../components/list/data";
+import { useDispatch, useSelector } from "react-redux";
+import { get_post } from "../redux/slice/postsSlice";
 
 const Details: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const postData = useSelector((s) => s?.posts);
+  console.log("postData", postData);
 
+  useEffect(() => {
+    dispatch(get_post(id));
+  }, []);
   // Convert id to a number and find the post
   const post = postsData.find((item) => item.id === Number(id));
 
-  if (!post) {
+  if (!postData.post) {
     return (
       <Box
         sx={{
@@ -103,8 +111,9 @@ const Details: React.FC = () => {
               color: "#fff",
               fontSize: "2rem",
             }}
+            src={postData?.post?.posted_by?.picture}
           >
-            {post.place.charAt(0).toUpperCase()}
+            {postData?.post?.posted_by?.user?.name?.charAt(0).toUpperCase()}
           </Avatar>
         </Box>
         <CardContent>
@@ -112,43 +121,45 @@ const Details: React.FC = () => {
             variant="h5"
             sx={{ fontWeight: "bold", textAlign: "center", marginBottom: 2 }}
           >
-            {post.place}
+            {postData?.post?.place}
           </Typography>
           <Divider sx={{ marginBottom: 2 }} />
           <Grid container spacing={2}>
             <Grid item xs={6}>
               <Typography variant="body2" color="text.secondary">
-                <strong>Country:</strong> {post.country}
+                <strong>Country:</strong> {postData?.post?.travel_to_country}
               </Typography>
             </Grid>
             <Grid item xs={6}>
               <Typography variant="body2" color="text.secondary">
-                <strong>City:</strong> {post.city}
+                <strong>City:</strong> {postData?.post?.travel_to_city}
               </Typography>
             </Grid>
             <Grid item xs={6}>
               <Typography variant="body2" color="text.secondary">
-                <strong>Postal Code:</strong> {post.postalCode}
+                <strong>Postal Code:</strong>{" "}
+                {postData?.post?.travel_to_postal_code}
               </Typography>
             </Grid>
             <Grid item xs={6}>
               <Typography variant="body2" color="text.secondary">
-                <strong>Place:</strong> {post.place}
+                <strong>Place:</strong> {postData?.post?.travel_to_city}
               </Typography>
             </Grid>
             <Grid item xs={6}>
               <Typography variant="body2" color="text.secondary">
-                <strong>Departure Date:</strong> {post.departure}
+                <strong>Departure Date:</strong> {postData?.post?.date_from}
               </Typography>
             </Grid>
             <Grid item xs={6}>
               <Typography variant="body2" color="text.secondary">
-                <strong>Return Date:</strong> {post.return}
+                <strong>Return Date:</strong> {postData?.post?.date_to}
               </Typography>
             </Grid>
             <Grid item xs={6}>
               <Typography variant="body2" color="text.secondary">
-                <strong>Posted By:</strong> {post.name} {/* Added Username */}
+                <strong>Posted By:</strong>{" "}
+                {postData?.post?.posted_by?.user?.name} {/* Added Username */}
               </Typography>
             </Grid>
             <Grid item xs={6}>
