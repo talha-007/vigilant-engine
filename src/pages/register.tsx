@@ -16,6 +16,8 @@ import vector3 from "../assets/Vector3.png";
 import { useState } from "react";
 import Grid from "@mui/material/Grid2";
 import authServices from "../redux/api/authService";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const initialValues = {
   email: "",
@@ -26,6 +28,7 @@ const initialValues = {
   gender: "",
 };
 const RegisterPage = () => {
+  const navigate = useNavigate();
   const [values, setValues] = useState(initialValues);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -85,12 +88,11 @@ const RegisterPage = () => {
       temp.gender = fieldValue.gender ? "" : "Gender is required";
     }
 
-    // Phone validation (numeric and required)
     if ("phone" in fieldValue) {
       temp.phone = fieldValue.phone
-        ? /^[0-9]{10}$/.test(fieldValue.phone)
+        ? /^\+[1-9]\d{1,14}$/.test(fieldValue.phone)
           ? ""
-          : "Please enter a valid 10-digit phone number"
+          : "Please enter a valid phone number in international format (e.g., +4917651751892)"
         : "Phone number is required";
     }
 
@@ -117,22 +119,26 @@ const RegisterPage = () => {
         email: values.email,
         password: values.password,
         re_password: values.re_password,
-        profile: {
-          gender: values.gender,
-          phone: values.phone,
-          picture: menuItemImg,
-        },
+        "profile.gender": values.gender,
+        "profile.picture": menuItemImg,
+        "profile.phone": values.phone,
       };
+
       console.log("datas", datas);
       if (validations()) {
         setIsLoading(true);
         const res = await authServices.signUp(datas);
         console.log("res", res);
-        setIsLoading(false);
+        if (res.status === 201) {
+          toast.success("Verification email has been sent to your email");
+          setIsLoading(false);
+          navigate("/login");
+        }
       }
     } catch (error) {
       console.log(error);
       setIsLoading(false);
+      toast.error(error?.response?.data?.errors[0]?.detail);
     }
   };
   return (
