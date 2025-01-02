@@ -6,6 +6,7 @@ import Page404 from "./pages/Page404";
 import LoginPage from "./pages/login";
 import RegisterPage from "./pages/register";
 import Details from "./pages/details";
+import AddPost from "./pages/addPost";
 
 export default function Router() {
   const routes = useRoutes([
@@ -18,6 +19,7 @@ export default function Router() {
       ],
     },
     { path: "details/:id", element: <Details /> },
+    { path: "add/post", element: <AddPost /> },
     {
       path: "/login",
       element: <LoginPage />,

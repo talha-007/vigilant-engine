@@ -8,7 +8,6 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import loginImg from "../assets/login.png";
 import Iconify from "../components/iconify";
 import vector1 from "../assets/Vector1.png";
 import vector2 from "../assets/vector2.png";
@@ -18,6 +17,7 @@ import authServices from "../redux/api/authService";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
+import { authStyles, login } from "./styles";
 const initialValues = {
   email: "",
   password: "",
@@ -111,58 +111,19 @@ const LoginPage = () => {
   };
   return (
     <Box sx={{ overflow: "auto", height: "100vh" }}>
-      <Box
-        sx={{
-          position: "absolute",
-          right: 0,
-          top: "10%",
-          zIndex: "-100",
-          display: { xs: "none", md: "block" },
-        }}
-      >
+      <Box sx={authStyles.vector1}>
         <img src={vector1} alt="" />
       </Box>
-      <Box
-        sx={{
-          position: "absolute",
-          right: 0,
-          bottom: "0px",
-          display: { xs: "none", md: "block" },
-        }}
-      >
+      <Box sx={authStyles.vector2}>
         <img src={vector2} alt="" />
       </Box>
-      <Box
-        sx={{
-          position: "absolute",
-          left: 0,
-          bottom: "0px",
-          display: { xs: "none", md: "block" },
-        }}
-      >
+      <Box sx={authStyles.vector3}>
         <img src={vector3} alt="" />
       </Box>
-      <Box
-        sx={{
-          boxShadow: "0px 10px 20px rgba(0,0,0, .2)",
-          borderRadius: "12px",
-          margin: "4rem auto",
-          width: { md: "70%", xs: "95%" },
-          overflow: "hidden",
-        }}
-      >
+      <Box sx={authStyles.mainWrapper}>
         <Grid container sx={{ height: "100%" }}>
           <Grid item xs={0} sm={6} md={6}>
-            <Box
-              sx={{
-                backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.5)), url(${loginImg})`,
-                backgroundRepeat: "no-repeat",
-                backgroundPosition: "center",
-                backgroundSize: "cover",
-                height: "100%",
-                overflow: "none",
-              }}
-            />
+            <Box sx={authStyles.loginImage} />
           </Grid>
           <Grid
             item
@@ -176,24 +137,9 @@ const LoginPage = () => {
             }}
           >
             <Box>
-              <Box
-                sx={{
-                  width: "100%",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  padding: "3rem 0rem 0rem",
-                  flexDirection: "column",
-                }}
-              >
+              <Box sx={authStyles.formWrapper}>
                 <Box>
-                  <Typography
-                    sx={{
-                      fontSize: { md: "3rem", xs: "2rem" },
-                      fontWeight: "900",
-                      fontFamily: "Montserrat",
-                    }}
-                  >
+                  <Typography variant="h2" textAlign={"center"}>
                     Welcome
                   </Typography>
                   <Typography
@@ -205,14 +151,7 @@ const LoginPage = () => {
                     Login with email
                   </Typography>
                 </Box>
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "1rem",
-                    marginTop: "1rem",
-                  }}
-                >
+                <Box sx={authStyles.form}>
                   <Box>
                     <Typography sx={{ paddingLeft: "10px", fontSize: "14px" }}>
                       Email
@@ -224,14 +163,6 @@ const LoginPage = () => {
                       value={values?.email}
                       error={Boolean(errors?.email)}
                       onChange={handleOnChange}
-                      sx={{
-                        "& .MuiOutlinedInput-root": {
-                          borderRadius: "14px",
-                        },
-                        "& .MuiOutlinedInput-input": {
-                          padding: "7px 14px",
-                        },
-                      }}
                     />
                   </Box>
                   <Box>
@@ -246,14 +177,6 @@ const LoginPage = () => {
                       error={Boolean(errors?.password)}
                       type={showPassword ? "text" : "password"}
                       onChange={handleOnChange}
-                      sx={{
-                        "& .MuiOutlinedInput-root": {
-                          borderRadius: "14px",
-                        },
-                        "& .MuiOutlinedInput-input": {
-                          padding: "7px 14px",
-                        },
-                      }}
                       slotProps={{
                         input: {
                           endAdornment: (
@@ -277,13 +200,7 @@ const LoginPage = () => {
                     />
                   </Box>
                   <Box>
-                    <Typography
-                      sx={{
-                        fontSize: "12px",
-                        cursor: "pointer",
-                        textAlign: "right",
-                      }}
-                    >
+                    <Typography sx={authStyles.forgotPass}>
                       Forgot Password?
                     </Typography>
                   </Box>
@@ -292,50 +209,23 @@ const LoginPage = () => {
                   <Button
                     variant="contained"
                     fullWidth
-                    sx={{
-                      minWidth: "232px",
-                      borderRadius: "14px",
-                      marginTop: "1rem",
-                      padding: ".6rem 0rem",
-                    }}
+                    sx={authStyles.submitBtn}
                     onClick={handleSubmit}
                   >
-                    {isLoading ? "loading..." : "Sign Up"}
+                    {isLoading ? "loading..." : "Login"}
                   </Button>
                 </Box>
               </Box>
               <Box sx={{ padding: { md: "0rem 10rem", xs: "0rem 1rem" } }}>
                 <Divider>or</Divider>
               </Box>
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "10px",
-                  justifyContent: "center",
-                  marginTop: "1rem",
-                }}
-              >
-                <Box
-                  sx={{
-                    border: "1px solid #ddd",
-                    borderRadius: "6px",
-                    padding: { md: ".4rem 1rem ", xs: "0rem 1rem " },
-                    ":hover": { border: "1px solid #000", cursor: "pointer" },
-                  }}
-                >
+              <Box sx={authStyles.IocnMainWrapper}>
+                <Box sx={authStyles.IconWrapper}>
                   <IconButton>
                     <Iconify width={18} icon="flat-color-icons:google" />
                   </IconButton>
                 </Box>
-                <Box
-                  sx={{
-                    border: "1px solid #ddd",
-                    borderRadius: "6px",
-                    padding: { md: ".4rem 1rem ", xs: "0rem 1rem " },
-                    ":hover": { border: "1px solid #000", cursor: "pointer" },
-                  }}
-                >
+                <Box sx={authStyles.IconWrapper}>
                   <IconButton>
                     <Iconify width={18} icon="logos:facebook" />
                   </IconButton>

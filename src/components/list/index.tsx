@@ -23,6 +23,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { get_AllCountries } from "../../redux/slice/filterSlice";
 import { get_AllPosts } from "../../redux/slice/postsSlice";
+import { listStyles } from "../../pages/styles";
 
 const UserPosts = () => {
   const dispatch = useDispatch();
@@ -96,17 +97,7 @@ const UserPosts = () => {
 
   return (
     <>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: { xs: "column", md: "row" },
-          maxWidth: "1550px",
-          margin: "auto",
-          marginTop: "3rem",
-          position: "relative",
-          padding: "0rem 1rem",
-        }}
-      >
+      <Box sx={listStyles.userPostsWrapper}>
         {!isMobile && (
           <Filters onFilterChange={handleFilterChange} data={Posts} />
         )}
@@ -137,7 +128,7 @@ const UserPosts = () => {
                     <CloseIcon />
                   </IconButton>
                 </Box>
-                <Filters onFilterChange={handleFilterChange} />
+                <Filters data={Posts} onFilterChange={handleFilterChange} />
               </Box>
             </Drawer>
           </>
@@ -160,70 +151,25 @@ const UserPosts = () => {
             >
               User Posts
             </Typography>
-            <Button variant="contained" onClick={handleOpenAddPostDialogue}>
+            <Button variant="contained" onClick={() => navigate("/add/post")}>
               Add Post
             </Button>
           </Box>
           <Grid container spacing={3} sx={{ padding: 3 }}>
             {Posts?.data?.length > 0 ? (
-              Posts?.data?.map((post) => (
+              Posts?.data?.map((post: any) => (
                 <Grid item xs={12} sm={6} md={4} key={post.id}>
-                  <Card
-                    sx={{
-                      borderRadius: "16px",
-                      boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)",
-                      backgroundColor: "#f9f9f9",
-                      overflow: "hidden",
-                      display: "flex",
-                      flexDirection: "column",
-                      height: "100%",
-                      transition: "transform 0.2s ease-in-out",
-                      "&:hover": {
-                        transform: "translateY(-5px)",
-                      },
-                    }}
-                  >
-                    <Box
-                      sx={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        padding: 3,
-                        backgroundColor: "#EDEDED",
-                      }}
-                    >
+                  <Card sx={listStyles.postWrapper}>
+                    <Box sx={listStyles.imageWrapper}>
                       <Avatar
-                        sx={{
-                          width: 64,
-                          height: 64,
-                          backgroundColor: "#1976D2",
-                          color: "#fff",
-                          fontSize: "1.25rem",
-                        }}
+                        sx={listStyles.avatar}
                         src={post?.posted_by?.picture}
                       >
                         {post.place?.charAt(0).toUpperCase()}
                       </Avatar>
                     </Box>
-                    <CardContent
-                      sx={{
-                        padding: 2,
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: 2,
-                        flexGrow: 1,
-                      }}
-                    >
-                      <Typography
-                        variant="h6"
-                        sx={{
-                          fontWeight: "bold",
-                          color: "#333",
-                          overflow: "hidden",
-                          whiteSpace: "nowrap",
-                          textOverflow: "ellipsis",
-                        }}
-                      >
+                    <CardContent sx={listStyles.cardContent}>
+                      <Typography variant="h6" sx={listStyles.postTitle}>
                         {post?.title || "Dummy Title"}
                       </Typography>
                       <Typography variant="body2" sx={{ color: "#555" }}>
@@ -254,29 +200,14 @@ const UserPosts = () => {
                     >
                       <Button
                         variant="contained"
-                        sx={{
-                          textTransform: "capitalize",
-                          borderRadius: "8px",
-                          backgroundColor: "#1976D2",
-                          "&:hover": {
-                            backgroundColor: "#125CA1",
-                          },
-                        }}
+                        sx={listStyles.detailsBtn}
                         onClick={() => navigate(`/details/${post.id}`)}
                       >
                         See Details
                       </Button>
                       <Button
                         variant="outlined"
-                        sx={{
-                          textTransform: "capitalize",
-                          borderRadius: "8px",
-                          color: "#1976D2",
-                          borderColor: "#1976D2",
-                          "&:hover": {
-                            backgroundColor: "#E3F2FD",
-                          },
-                        }}
+                        sx={listStyles.editBtn}
                         onClick={() => handleOpenEditPostDialogue(post)}
                       >
                         Edit

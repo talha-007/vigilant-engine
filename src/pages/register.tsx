@@ -8,7 +8,6 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import signUpImg from "../assets/signUp.jpg";
 import Iconify from "../components/iconify";
 import vector1 from "../assets/Vector1.png";
 import vector2 from "../assets/vector2.png";
@@ -18,6 +17,7 @@ import Grid from "@mui/material/Grid2";
 import authServices from "../redux/api/authService";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { authStyles, login } from "./styles";
 
 const initialValues = {
   email: "",
@@ -143,108 +143,32 @@ const RegisterPage = () => {
   };
   return (
     <Box sx={{ overflow: "auto", height: "100vh" }}>
-      <Box
-        sx={{
-          position: "absolute",
-          right: 0,
-          top: "10%",
-          zIndex: "-100",
-          display: { xs: "none", md: "block" },
-        }}
-      >
+      <Box sx={authStyles.vector1}>
         <img src={vector1} alt="" />
       </Box>
-      <Box
-        sx={{
-          position: "absolute",
-          right: 0,
-          bottom: "0px",
-          display: { xs: "none", md: "block" },
-        }}
-      >
+      <Box sx={authStyles.vector2}>
         <img src={vector2} alt="" />
       </Box>
-      <Box
-        sx={{
-          position: "absolute",
-          left: 0,
-          bottom: "0px",
-          display: { xs: "none", md: "block" },
-        }}
-      >
+      <Box sx={authStyles.vector3}>
         <img src={vector3} alt="" />
       </Box>
-      <Box
-        sx={{
-          boxShadow: "0px 10px 20px rgba(0,0,0, .2)",
-          borderRadius: "12px",
-          margin: "4rem auto",
-          width: { md: "70%", xs: "95%" },
-          overflow: "hidden",
-        }}
-      >
+      <Box sx={authStyles.mainWrapper}>
         <Grid container>
           <Grid size={{ xs: 0, md: 6 }}>
-            <Box
-              sx={{
-                backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.5)), url(${signUpImg})`,
-                backgroundRepeat: "no-repeat",
-                backgroundPosition: "center",
-                backgroundSize: "cover",
-                height: "100%",
-                overflow: "none",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <Box
-                sx={{
-                  padding: { md: "0rem 10rem", xs: "0rem 1rem" },
-                  display: { xs: "none", md: "block" },
-                }}
-              >
+            <Box sx={authStyles.registerImage}>
+              <Box sx={authStyles.imageTextWrapper}>
                 <Box>
-                  <Typography
-                    sx={{
-                      fontSize: { md: "3rem", xs: "2rem" },
-                      fontWeight: "900",
-                      fontFamily: "Montserrat",
-                      color: "#fff",
-                    }}
-                  >
+                  <Typography variant="h2" color="#fff">
                     Sign Up
                   </Typography>
                 </Box>
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "10px",
-                    justifyContent: "center",
-                    marginTop: "1rem",
-                  }}
-                >
-                  <Box
-                    sx={{
-                      border: "1px solid #ddd",
-                      borderRadius: "6px",
-                      padding: { md: ".4rem 1rem ", xs: "0rem 1rem " },
-                      ":hover": { border: "1px solid #000", cursor: "pointer" },
-                    }}
-                  >
+                <Box sx={authStyles.IocnMainWrapper}>
+                  <Box sx={authStyles.IconWrapper}>
                     <IconButton>
                       <Iconify width={18} icon="flat-color-icons:google" />
                     </IconButton>
                   </Box>
-                  <Box
-                    sx={{
-                      border: "1px solid #ddd",
-                      borderRadius: "6px",
-                      padding: { md: ".4rem 1rem ", xs: "0rem 1rem " },
-                      ":hover": { border: "1px solid #000", cursor: "pointer" },
-                    }}
-                  >
+                  <Box sx={authStyles.IconWrapper}>
                     <IconButton>
                       <Iconify width={18} icon="logos:facebook" />
                     </IconButton>
@@ -279,36 +203,14 @@ const RegisterPage = () => {
               justifyContent: "center",
             }}
           >
-            <Box
-              sx={{
-                width: "100%",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                padding: "3rem 0rem",
-                flexDirection: "column",
-              }}
-            >
+            <Box sx={authStyles.formWrapper}>
               <Grid container spacing={2} sx={{ padding: "0rem 2rem" }}>
                 <Grid
                   size={12}
                   sx={{ justifyContent: "center", display: "flex" }}
                 >
                   <Box
-                    sx={{
-                      width: "150px",
-                      height: "150px",
-                      background: "#eeeeee",
-                      // boxShadow: '0 6px 24px #f1f1f1',
-                      borderRadius: "10rem",
-                      overflow: "hidden",
-                      border: "1px dashed #999",
-                      margin: "15px auto",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      position: "relative",
-                    }}
+                    sx={authStyles.userProfile}
                     onMouseOver={() => setOnMouse(true)}
                     onMouseOut={() => setOnMouse(false)}
                   >
@@ -327,18 +229,7 @@ const RegisterPage = () => {
                         }}
                       />
                     ) : (
-                      <Box
-                        sx={{
-                          position: "absolute",
-                          background: "#8888885c",
-                          width: "150px",
-                          height: "150px",
-                          top: "0px",
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                        }}
-                      >
+                      <Box sx={authStyles.userProfile2}>
                         <label htmlFor="menuItemImg">
                           {" "}
                           <Iconify
@@ -361,18 +252,7 @@ const RegisterPage = () => {
                         <label htmlFor="menuItemImg">Click to upload</label>
                       )} */}
                     {onMouse && (
-                      <Box
-                        sx={{
-                          position: "absolute",
-                          background: "#8888885c",
-                          width: "150px",
-                          height: "150px",
-                          top: "0px",
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                        }}
-                      >
+                      <Box sx={authStyles.userProfile2}>
                         <label htmlFor="menuItemImg">
                           {" "}
                           <Iconify
@@ -413,14 +293,7 @@ const RegisterPage = () => {
                       value={values?.email}
                       error={Boolean(errors?.email)}
                       onChange={handleOnChange}
-                      sx={{
-                        "& .MuiOutlinedInput-root": {
-                          borderRadius: "14px",
-                        },
-                        "& .MuiOutlinedInput-input": {
-                          padding: "7px 14px",
-                        },
-                      }}
+                      sx={{}}
                     />
                   </Box>
                 </Grid>
@@ -437,14 +310,6 @@ const RegisterPage = () => {
                       error={Boolean(errors?.password)}
                       type={showPassword ? "text" : "password"}
                       onChange={handleOnChange}
-                      sx={{
-                        "& .MuiOutlinedInput-root": {
-                          borderRadius: "14px",
-                        },
-                        "& .MuiOutlinedInput-input": {
-                          padding: "7px 14px",
-                        },
-                      }}
                       slotProps={{
                         input: {
                           endAdornment: (
@@ -481,14 +346,6 @@ const RegisterPage = () => {
                       error={Boolean(errors?.re_password)}
                       type={showConfirmPassword ? "text" : "password"}
                       onChange={handleOnChange}
-                      sx={{
-                        "& .MuiOutlinedInput-root": {
-                          borderRadius: "14px",
-                        },
-                        "& .MuiOutlinedInput-input": {
-                          padding: "7px 14px",
-                        },
-                      }}
                       slotProps={{
                         input: {
                           endAdornment: (
@@ -527,14 +384,6 @@ const RegisterPage = () => {
                       value={values?.gender}
                       error={Boolean(errors?.gender)}
                       onChange={handleOnChange}
-                      sx={{
-                        "& .MuiOutlinedInput-root": {
-                          borderRadius: "14px",
-                        },
-                        "& .MuiOutlinedInput-input": {
-                          padding: "7px 14px",
-                        },
-                      }}
                     >
                       <MenuItem value="1">Male</MenuItem>
                       <MenuItem value="0">Female</MenuItem>
@@ -553,14 +402,6 @@ const RegisterPage = () => {
                       value={values?.phone}
                       error={Boolean(errors?.phone)}
                       onChange={handleOnChange}
-                      sx={{
-                        "& .MuiOutlinedInput-root": {
-                          borderRadius: "14px",
-                        },
-                        "& .MuiOutlinedInput-input": {
-                          padding: "7px 14px",
-                        },
-                      }}
                     />
                   </Box>
                 </Grid>
@@ -570,12 +411,7 @@ const RegisterPage = () => {
                   onClick={handleSubmit}
                   variant="contained"
                   fullWidth
-                  sx={{
-                    minWidth: "232px",
-                    borderRadius: "14px",
-                    marginTop: "1rem",
-                    padding: ".6rem 0rem",
-                  }}
+                  sx={authStyles.submitBtn}
                 >
                   {isLoading ? "loading..." : "Sign Up"}
                 </Button>
@@ -586,35 +422,13 @@ const RegisterPage = () => {
                   display: { xs: "block", md: "none" },
                 }}
               >
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "10px",
-                    justifyContent: "center",
-                    marginTop: "1rem",
-                  }}
-                >
-                  <Box
-                    sx={{
-                      border: "1px solid #ddd",
-                      borderRadius: "6px",
-                      padding: { md: ".4rem 1rem ", xs: "0rem 1rem " },
-                      ":hover": { border: "1px solid #000", cursor: "pointer" },
-                    }}
-                  >
+                <Box sx={authStyles.IocnMainWrapper}>
+                  <Box sx={authStyles.IconWrapper}>
                     <IconButton>
                       <Iconify width={18} icon="flat-color-icons:google" />
                     </IconButton>
                   </Box>
-                  <Box
-                    sx={{
-                      border: "1px solid #ddd",
-                      borderRadius: "6px",
-                      padding: { md: ".4rem 1rem ", xs: "0rem 1rem " },
-                      ":hover": { border: "1px solid #000", cursor: "pointer" },
-                    }}
-                  >
+                  <Box sx={authStyles.IconWrapper}>
                     <IconButton>
                       <Iconify width={18} icon="logos:facebook" />
                     </IconButton>

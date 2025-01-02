@@ -10,6 +10,7 @@ import {
   InputLabel,
 } from "@mui/material";
 import { FilterState } from "../../types";
+import { filterStyles } from "../../pages/styles";
 
 interface FiltersProps {
   onFilterChange: (filters: FilterState) => void;
@@ -17,22 +18,22 @@ interface FiltersProps {
 }
 
 const Filters: React.FC<FiltersProps> = ({ onFilterChange, data }) => {
-  const posts = data?.data || [];
+  const posts = Array.isArray(data?.data) ? data.data : []; // Ensure posts is always an array
 
   // Extract unique filter options
   const countries = Array.from(
-    new Set(posts.map((post) => post.travel_to_country).filter(Boolean))
+    new Set(posts?.map((post) => post?.travel_to_country)?.filter(Boolean))
   );
   const cities = Array.from(
-    new Set(posts.map((post) => post.travel_to_city).filter(Boolean))
+    new Set(posts?.map((post) => post?.travel_to_city)?.filter(Boolean))
   );
   const genders = Array.from(
     new Set(
       posts
-        .map((post) =>
-          post.posted_by?.gender !== undefined ? post.posted_by.gender : null
+        ?.map((post) =>
+          post?.posted_by?.gender !== undefined ? post?.posted_by?.gender : null
         )
-        .filter((gender) => gender !== null)
+        ?.filter((gender) => gender !== null)
     )
   );
 
@@ -66,21 +67,7 @@ const Filters: React.FC<FiltersProps> = ({ onFilterChange, data }) => {
   };
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        gap: 2,
-        width: "100%",
-        maxWidth: "320px",
-        p: 3,
-        backgroundColor: "white",
-        boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
-        borderRadius: "12px",
-        border: "1px solid #e0e0e0",
-        height: "100%",
-      }}
-    >
+    <Box sx={filterStyles.mainWrapper}>
       <Typography variant="h6" color="primary">
         Filters
       </Typography>

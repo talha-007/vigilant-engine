@@ -15,7 +15,7 @@ createRoot(document.getElementById("root")!).render(
     <HelmetProvider>
       <BrowserRouter>
         <Provider store={store}>
-          <Suspense>
+          <Suspense fallback={<div>Loading...</div>}>
             <App />
             <ToastContainer position="bottom-center" />
           </Suspense>

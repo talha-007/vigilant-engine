@@ -16,11 +16,14 @@ interface login {
 }
 const signUp = (data: signup) => callAPiMultiPart.post("auth/users/", data);
 const login = (data: login) => callAPiMultiPart.post("auth/jwt/create/", data);
+const refresh = (data: login) =>
+  callAPiMultiPart.post("auth/jwt/refresh/", data);
 const getProfile = () => callAPi.get("auth/users/me");
 
 const authServices = {
   signUp,
   login,
   getProfile,
+  refresh,
 };
 export default authServices;
