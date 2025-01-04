@@ -20,6 +20,8 @@ import { useNavigate } from "react-router-dom";
 import { authStyles, login } from "./styles";
 
 const initialValues = {
+  first_name: "",
+  last_name: "",
   email: "",
   password: "",
   re_password: "",
@@ -87,6 +89,12 @@ const RegisterPage = () => {
     if ("gender" in fieldValue) {
       temp.gender = fieldValue.gender ? "" : "Gender is required";
     }
+    if ("first_name" in fieldValue) {
+      temp.first_name = fieldValue.first_name ? "" : "This field is required";
+    }
+    if ("last_name" in fieldValue) {
+      temp.last_name = fieldValue.last_name ? "" : "This field is required";
+    }
 
     if ("phone" in fieldValue) {
       temp.phone = fieldValue.phone
@@ -122,6 +130,7 @@ const RegisterPage = () => {
         "profile.gender": values.gender,
         "profile.picture": menuItemImg,
         "profile.phone": values.phone,
+        name: values.first_name + values.last_name,
       };
 
       console.log("datas", datas);
@@ -281,6 +290,37 @@ const RegisterPage = () => {
                     style={{ display: "none" }}
                   />
                 </Grid>
+
+                <Grid size={{ xs: 12, md: 6 }}>
+                  <Box>
+                    <Typography sx={{ paddingLeft: "10px", fontSize: "14px" }}>
+                      First Name
+                    </Typography>
+                    <TextField
+                      fullWidth
+                      name="first_name"
+                      helperText={errors?.first_name}
+                      value={values?.first_name}
+                      error={Boolean(errors?.first_name)}
+                      onChange={handleOnChange}
+                    />
+                  </Box>
+                </Grid>
+                <Grid size={{ xs: 12, md: 6 }}>
+                  <Box>
+                    <Typography sx={{ paddingLeft: "10px", fontSize: "14px" }}>
+                      Last Name
+                    </Typography>
+                    <TextField
+                      fullWidth
+                      name="last_name"
+                      helperText={errors?.last_name}
+                      value={values?.last_name}
+                      error={Boolean(errors?.last_name)}
+                      onChange={handleOnChange}
+                    />
+                  </Box>
+                </Grid>
                 <Grid size={{ xs: 12 }}>
                   <Box>
                     <Typography sx={{ paddingLeft: "10px", fontSize: "14px" }}>
@@ -297,6 +337,41 @@ const RegisterPage = () => {
                     />
                   </Box>
                 </Grid>
+                <Grid size={{ xs: 12, md: 6 }}>
+                  <Box>
+                    <Typography sx={{ paddingLeft: "10px", fontSize: "14px" }}>
+                      Phone Number
+                    </Typography>
+                    <TextField
+                      fullWidth
+                      name="phone"
+                      helperText={errors?.phone}
+                      value={values?.phone}
+                      error={Boolean(errors?.phone)}
+                      onChange={handleOnChange}
+                    />
+                  </Box>
+                </Grid>
+                <Grid size={{ xs: 12, md: 6 }}>
+                  <Box>
+                    <Typography sx={{ paddingLeft: "10px", fontSize: "14px" }}>
+                      Gender
+                    </Typography>
+                    <TextField
+                      select
+                      fullWidth
+                      name="gender"
+                      helperText={errors?.gender}
+                      value={values?.gender}
+                      error={Boolean(errors?.gender)}
+                      onChange={handleOnChange}
+                    >
+                      <MenuItem value="1">Male</MenuItem>
+                      <MenuItem value="0">Female</MenuItem>
+                    </TextField>
+                  </Box>
+                </Grid>
+
                 <Grid size={{ xs: 12, md: 6 }}>
                   <Box>
                     <Typography sx={{ paddingLeft: "10px", fontSize: "14px" }}>
@@ -368,40 +443,6 @@ const RegisterPage = () => {
                           ),
                         },
                       }}
-                    />
-                  </Box>
-                </Grid>
-                <Grid size={{ xs: 12, md: 6 }}>
-                  <Box>
-                    <Typography sx={{ paddingLeft: "10px", fontSize: "14px" }}>
-                      Gender
-                    </Typography>
-                    <TextField
-                      select
-                      fullWidth
-                      name="gender"
-                      helperText={errors?.gender}
-                      value={values?.gender}
-                      error={Boolean(errors?.gender)}
-                      onChange={handleOnChange}
-                    >
-                      <MenuItem value="1">Male</MenuItem>
-                      <MenuItem value="0">Female</MenuItem>
-                    </TextField>
-                  </Box>
-                </Grid>
-                <Grid size={{ xs: 12, md: 6 }}>
-                  <Box>
-                    <Typography sx={{ paddingLeft: "10px", fontSize: "14px" }}>
-                      Phone Number
-                    </Typography>
-                    <TextField
-                      fullWidth
-                      name="phone"
-                      helperText={errors?.phone}
-                      value={values?.phone}
-                      error={Boolean(errors?.phone)}
-                      onChange={handleOnChange}
                     />
                   </Box>
                 </Grid>

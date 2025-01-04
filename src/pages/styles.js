@@ -14,12 +14,14 @@ export const authStyles = {
   vector2: {
     position: "absolute",
     right: 0,
+    zIndex: "-100",
     bottom: "0px",
     display: { xs: "none", md: "block" },
   },
   vector3: {
     position: "absolute",
     left: 0,
+    zIndex: "-100",
     bottom: "0px",
     display: { xs: "none", md: "block" },
   },

@@ -4,7 +4,6 @@ import Router from "./routes";
 import ThemeProvider from "./theme";
 
 function App() {
-  // Call this function at app initialization
   scheduleTokenRefresh();
   return (
     <ThemeProvider>

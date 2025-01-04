@@ -2,7 +2,6 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 export const API_URL = "https://api.zusammenreisen.com/api";
-export const IMAGE_BASEURL = "https://api.zusammenreisen.com/api";
 
 export const callAPi = axios.create({
   baseURL: API_URL,
@@ -35,21 +34,29 @@ const processQueue = (error: any, token: string | null = null) => {
 const refreshAccessToken = async () => {
   const refreshToken = Cookies.get("refreshToken");
   if (!refreshToken) {
-    throw new Error("No refresh token available");
+    console.error("No refresh token available. Logging out.");
+    handleLogout();
+    return null;
   }
 
-  const response = await axios.post(`${API_URL}/auth/jwt/refresh/`, {
-    refresh: refreshToken,
-  });
-  const newAccessToken = response.data.access;
+  try {
+    const response = await axios.post(`${API_URL}/auth/jwt/refresh/`, {
+      refresh: refreshToken,
+    });
+    const newAccessToken = response.data.access;
 
-  Cookies.set("accessToken", newAccessToken, {
-    path: "/",
-    secure: true,
-    sameSite: "strict",
-  });
+    Cookies.set("accessToken", newAccessToken, {
+      path: "/",
+      secure: true,
+      sameSite: "strict",
+    });
 
-  return newAccessToken;
+    return newAccessToken;
+  } catch (error) {
+    console.error("Error refreshing access token:", error);
+    handleLogout();
+    return null;
+  }
 };
 
 const attachAuthorizationHeader = (config: any) => {
@@ -60,7 +67,6 @@ const attachAuthorizationHeader = (config: any) => {
   return config;
 };
 
-// Request Interceptor
 callAPi.interceptors.request.use(attachAuthorizationHeader, (error) =>
   Promise.reject(error)
 );
@@ -68,7 +74,12 @@ callAPiMultiPart.interceptors.request.use(attachAuthorizationHeader, (error) =>
   Promise.reject(error)
 );
 
-// Response Interceptor for Token Refresh
+const handleLogout = () => {
+  Cookies.remove("accessToken");
+  Cookies.remove("refreshToken");
+  window.location.href = "/login"; // Redirect to login page
+};
+
 const responseInterceptor = async (error: any) => {
   const originalRequest = error.config;
 
@@ -89,11 +100,17 @@ const responseInterceptor = async (error: any) => {
 
     try {
       const newAccessToken = await refreshAccessToken();
+      if (!newAccessToken) {
+        handleLogout();
+        return Promise.reject("Unable to refresh token. Logging out.");
+      }
+
       processQueue(null, newAccessToken);
       originalRequest.headers.Authorization = `JWT ${newAccessToken}`;
       return axios(originalRequest);
     } catch (err) {
       processQueue(err, null);
+      handleLogout();
       return Promise.reject(err);
     } finally {
       isRefreshing = false;
@@ -104,13 +121,11 @@ const responseInterceptor = async (error: any) => {
 };
 
 callAPi.interceptors.response.use((response) => response, responseInterceptor);
-
 callAPiMultiPart.interceptors.response.use(
   (response) => response,
   responseInterceptor
 );
 
-// Schedule Token Refresh Every 8 Minutes
 export const scheduleTokenRefresh = () => {
   setInterval(async () => {
     try {

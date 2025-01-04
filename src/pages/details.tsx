@@ -26,38 +26,8 @@ const Details: React.FC = () => {
     dispatch(get_post(id));
   }, [id, dispatch]);
 
-  if (!postData?.post) {
-    return (
-      <Box sx={detailStyles.notFound}>
-        <Typography
-          variant="h6"
-          color="error"
-          sx={{ fontWeight: "bold", marginBottom: 2 }}
-        >
-          Oops! Post not found.
-        </Typography>
-        <Typography variant="body2" sx={{ marginBottom: 3 }}>
-          The post you are looking for does not exist or has been removed.
-          Please check the ID or go back to the homepage.
-        </Typography>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => navigate("/")}
-          sx={{
-            textTransform: "none",
-            padding: "8px 16px",
-            borderRadius: "8px",
-            fontWeight: "bold",
-          }}
-        >
-          Go Back to Homepage
-        </Button>
-      </Box>
-    );
-  }
-
   const images = postData?.post?.images || [];
+  console.log(images);
 
   return (
     <Box
@@ -96,11 +66,11 @@ const Details: React.FC = () => {
             maxHeight: 400,
           }}
         >
-          {images.map((image, index) => (
+          {images?.map((item, index) => (
             <Box
               key={index}
               component="img"
-              src={image}
+              src={item.image}
               alt={`Post image ${index + 1}`}
               sx={{
                 width: "100%",

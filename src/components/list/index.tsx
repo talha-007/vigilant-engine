@@ -14,7 +14,6 @@ import {
 } from "@mui/material";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import CloseIcon from "@mui/icons-material/Close";
-import postsData from "./data";
 import { FilterState } from "../../types";
 import Filters from "../filters";
 import AddPost from "../dialogs/addPost";
@@ -49,7 +48,7 @@ const UserPosts = () => {
     dispatch(get_AllCountries());
     dispatch(get_AllPosts());
   }, [refetch]);
-  const filteredPosts = postsData.filter((post) => {
+  const filteredPosts = Posts?.data?.filter((post) => {
     const { country, city, postalCode, gender } = filters;
 
     if (country && post.country !== country) return false;
@@ -156,8 +155,8 @@ const UserPosts = () => {
             </Button>
           </Box>
           <Grid container spacing={3} sx={{ padding: 3 }}>
-            {Posts?.data?.length > 0 ? (
-              Posts?.data?.map((post: any) => (
+            {currentPosts?.length > 0 ? (
+              currentPosts?.map((post: any) => (
                 <Grid item xs={12} sm={6} md={4} key={post.id}>
                   <Card sx={listStyles.postWrapper}>
                     <Box sx={listStyles.imageWrapper}>
