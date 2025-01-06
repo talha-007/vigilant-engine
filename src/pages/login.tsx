@@ -88,6 +88,11 @@ const LoginPage = () => {
         const res = await authServices.login(datas);
         console.log("res", res);
         if (res.status === 200) {
+          Cookies.set("userId", res.data.id, {
+            path: "/",
+            secure: true,
+            sameSite: "strict",
+          });
           Cookies.set("accessToken", res.data.access, {
             path: "/",
             secure: true,
@@ -98,8 +103,8 @@ const LoginPage = () => {
             secure: true,
             sameSite: "strict",
           });
-          toast.success("Login successful");
           navigate("/");
+          toast.success("Login successful");
           setIsLoading(false);
         }
       }

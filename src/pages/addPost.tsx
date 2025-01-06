@@ -58,6 +58,8 @@ const AddPost = () => {
   const navigate = useNavigate();
   const getCountries = useSelector((state) => state.filter);
   console.log("images", imageFiles);
+  const cities = useSelector((s) => s.filter) || [];
+  console.log("cities", cities);
 
   useEffect(() => {
     dispatch(get_AllCountries());
@@ -67,8 +69,7 @@ const AddPost = () => {
     setFormData((prevData) => ({ ...prevData, [name]: value }));
     validations({ [name]: value });
   };
-  const cities = useSelector((s) => s.filter) || [];
-  console.log("cities", cities);
+
   useEffect(() => {
     if (formData.country) {
       dispatch(getCitiesByCId(formData.country));
@@ -185,7 +186,7 @@ const AddPost = () => {
           height: "100px",
         }}
       >
-        <Navbar />
+        <Navbar position="fixed" />
       </Box>
       <Container sx={{ padding: "5rem 0rem" }}>
         <Box>

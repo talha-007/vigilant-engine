@@ -16,6 +16,7 @@ import Cookies from "js-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import { get_profile } from "../../redux/slice/profileSlice";
 import { toast } from "react-toastify";
+import { Chat } from "@mui/icons-material";
 
 const pages = [
   { id: 1, pageName: "Home", path: "/" },
@@ -23,7 +24,7 @@ const pages = [
   { id: 3, pageName: "Blog", path: "/blog" },
 ];
 
-function Navbar() {
+function Navbar({ position }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
@@ -36,7 +37,6 @@ function Navbar() {
   const [scrolled, setScrolled] = React.useState(false);
 
   const profile = useSelector((s) => s?.profile);
-
   console.log("profile", profile);
   React.useEffect(() => {
     dispatch(get_profile());
@@ -79,7 +79,7 @@ function Navbar() {
 
   return (
     <AppBar
-      position="fixed"
+      position={position}
       sx={{
         background: scrolled ? "#fff" : "transparent",
         transition: "background 0.3s ease",
@@ -220,49 +220,54 @@ function Navbar() {
             ))}
           </Box>
           {accessToken ? (
-            <Box sx={{ flexGrow: 0 }}>
-              <Tooltip>
-                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar
-                    alt={profile?.profile?.name}
-                    src={profile?.profile?.profile?.picture}
-                  />
-                </IconButton>
-              </Tooltip>
-              <Menu
-                sx={{ mt: "45px", width: "250px" }}
-                id="menu-appbar"
-                anchorEl={anchorElUser}
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                open={Boolean(anchorElUser)}
-                onClose={handleCloseUserMenu}
-              >
-                <MenuItem>
-                  <Typography sx={{ textAlign: "center" }}>
-                    {profile?.profile?.name || "N/A"}
-                  </Typography>
-                </MenuItem>
-                <MenuItem>
-                  <Typography sx={{ textAlign: "center" }}>
-                    {" "}
-                    {profile?.profile?.email || "N/A"}
-                  </Typography>
-                </MenuItem>
-                <Divider />
-                <MenuItem onClick={handleLogout}>
-                  <Typography sx={{ textAlign: "center", color: "red" }}>
-                    Logout
-                  </Typography>
-                </MenuItem>
-              </Menu>
+            <Box sx={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <IconButton onClick={() => navigate("/chat")}>
+                <Chat sx={{ color: "#fff", ":hover": { color: "#1877F2" } }} />
+              </IconButton>
+              <Box sx={{ flexGrow: 0 }}>
+                <Tooltip>
+                  <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                    <Avatar
+                      alt={profile?.profile?.name}
+                      src={profile?.profile?.profile?.picture}
+                    />
+                  </IconButton>
+                </Tooltip>
+                <Menu
+                  sx={{ mt: "45px", width: "250px" }}
+                  id="menu-appbar"
+                  anchorEl={anchorElUser}
+                  anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  open={Boolean(anchorElUser)}
+                  onClose={handleCloseUserMenu}
+                >
+                  <MenuItem>
+                    <Typography sx={{ textAlign: "center" }}>
+                      {profile?.profile?.name || "N/A"}
+                    </Typography>
+                  </MenuItem>
+                  <MenuItem>
+                    <Typography sx={{ textAlign: "center" }}>
+                      {" "}
+                      {profile?.profile?.email || "N/A"}
+                    </Typography>
+                  </MenuItem>
+                  <Divider />
+                  <MenuItem onClick={handleLogout}>
+                    <Typography sx={{ textAlign: "center", color: "red" }}>
+                      Logout
+                    </Typography>
+                  </MenuItem>
+                </Menu>
+              </Box>
             </Box>
           ) : (
             <Stack spacing={2} direction={"row"}>

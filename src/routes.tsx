@@ -7,6 +7,7 @@ import LoginPage from "./pages/login";
 import RegisterPage from "./pages/register";
 import Details from "./pages/details";
 import AddPost from "./pages/addPost";
+import ChatPage from "./pages/chatPage";
 
 export default function Router() {
   const routes = useRoutes([
@@ -27,6 +28,10 @@ export default function Router() {
     {
       path: "/register",
       element: <RegisterPage />,
+    },
+    {
+      path: "/chat",
+      element: <ChatPage />,
     },
     {
       path: "404",

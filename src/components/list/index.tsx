@@ -23,6 +23,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { get_AllCountries } from "../../redux/slice/filterSlice";
 import { get_AllPosts } from "../../redux/slice/postsSlice";
 import { listStyles } from "../../pages/styles";
+import image1 from "../../assets/1.jpg";
 
 const UserPosts = () => {
   const dispatch = useDispatch();
@@ -44,6 +45,9 @@ const UserPosts = () => {
   const getCountries = useSelector((state) => state.filter);
   const Posts = useSelector((state) => state.posts);
   console.log("getAllCountries", Posts);
+  const profile = useSelector((s) => s?.profile);
+
+  console.log("profile", profile);
   useEffect(() => {
     dispatch(get_AllCountries());
     dispatch(get_AllPosts());
@@ -64,6 +68,7 @@ const UserPosts = () => {
     startIndex,
     startIndex + postsPerPage
   );
+  console.log("currentPosts,", currentPosts);
 
   const handlePageChange = (
     _event: React.ChangeEvent<unknown>,
@@ -154,64 +159,141 @@ const UserPosts = () => {
               Add Post
             </Button>
           </Box>
-          <Grid container spacing={3} sx={{ padding: 3 }}>
+
+          <Grid container spacing={2} sx={{ padding: 2 }}>
             {currentPosts?.length > 0 ? (
-              currentPosts?.map((post: any) => (
-                <Grid item xs={12} sm={6} md={4} key={post.id}>
-                  <Card sx={listStyles.postWrapper}>
-                    <Box sx={listStyles.imageWrapper}>
-                      <Avatar
-                        sx={listStyles.avatar}
-                        src={post?.posted_by?.picture}
-                      >
-                        {post.place?.charAt(0).toUpperCase()}
-                      </Avatar>
-                    </Box>
-                    <CardContent sx={listStyles.cardContent}>
-                      <Typography variant="h6" sx={listStyles.postTitle}>
-                        {post?.title || "Dummy Title"}
-                      </Typography>
-                      <Typography variant="body2" sx={{ color: "#555" }}>
-                        <strong>Traveling to:</strong> {post.place}
-                      </Typography>
-                      <Typography variant="body2" sx={{ color: "#555" }}>
-                        <strong>Dates:</strong> {post?.date_from}{" "}
-                        <strong>-</strong> {post?.date_to}
-                      </Typography>
-                      <Typography variant="body2" sx={{ color: "#555" }}>
-                        <strong>Details:</strong>{" "}
-                        <div
-                          dangerouslySetInnerHTML={{
-                            __html: post.text,
-                          }}
-                        />
-                      </Typography>
-                      <Typography variant="body2" sx={{ color: "#555" }}>
-                        <strong>Gender:</strong> {post.gender}
-                      </Typography>
-                    </CardContent>
-                    <Box
+              currentPosts?.map((item: any) => (
+                <Grid item xs={12} md={4}>
+                  <Card
+                    sx={{
+                      position: "relative",
+                      overflow: "hidden",
+                      "&:hover .overlay": {
+                        transform: "translateY(0)", // Show overlay on hover
+                      },
+                      "&:hover .bgImage": {
+                        transform: "scale(1.1)", // Zoom background on hover
+                      },
+                      "& .MuiCardContent-root:last-child": {
+                        paddingBottom: "0px",
+                      },
+                    }}
+                  >
+                    <CardContent
                       sx={{
-                        padding: 2,
+                        padding: 0,
+                        height: "300px",
                         display: "flex",
-                        justifyContent: "space-between",
+                        alignItems: "center",
+                        justifyContent: "center",
                       }}
                     >
-                      <Button
-                        variant="contained"
-                        sx={listStyles.detailsBtn}
-                        onClick={() => navigate(`/details/${post.id}`)}
+                      {/* Background Image */}
+                      <Box
+                        className="bgImage"
+                        sx={{
+                          width: "100%",
+                          height: "100%",
+                          backgroundImage: `url(${image1})`,
+                          backgroundSize: "cover",
+                          backgroundPosition: "center",
+                          transition: "transform 0.3s ease-in-out",
+                        }}
+                      />
+                      {/* Overlay Details */}
+                      <Box
+                        className="overlay"
+                        sx={{
+                          position: "absolute",
+                          bottom: 0,
+                          left: 0,
+                          width: "100%",
+                          height: "100%",
+                          backgroundColor: "rgba(0, 0, 0, 0.8)",
+                          color: "white",
+                          display: "flex",
+                          flexDirection: "column",
+                          justifyContent: "space-between",
+                          padding: 2,
+                          transform: "translateY(100%)", // Start hidden below
+                          transition: "transform 0.4s ease-in-out",
+                          overflowY: "auto", // Handle long content
+                        }}
                       >
-                        See Details
-                      </Button>
-                      <Button
-                        variant="outlined"
-                        sx={listStyles.editBtn}
-                        onClick={() => handleOpenEditPostDialogue(post)}
-                      >
-                        Edit
-                      </Button>
-                    </Box>
+                        {/* Buttons */}
+                        <Box
+                          sx={{
+                            display: "flex",
+                            justifyContent: "flex-end",
+                            gap: 1,
+                          }}
+                        >
+                          {profile?.profile?.profile?.id ===
+                            item?.posted_by?.id && (
+                            <Button
+                              variant="outlined"
+                              color="primary"
+                              size="small"
+                              sx={{
+                                backgroundColor: "rgba(255, 255, 255, 0.2)",
+                                borderColor: "white",
+                                color: "white",
+                                "&:hover": {
+                                  backgroundColor: "rgba(255, 255, 255, 0.4)",
+                                },
+                              }}
+                              onClick={() => handleOpenEditPostDialogue(item)}
+                            >
+                              Edit
+                            </Button>
+                          )}
+
+                          <Button
+                            variant="outlined"
+                            color="primary"
+                            size="small"
+                            sx={{
+                              backgroundColor: "rgba(255, 255, 255, 0.2)",
+                              borderColor: "white",
+                              color: "white",
+                              "&:hover": {
+                                backgroundColor: "rgba(255, 255, 255, 0.4)",
+                              },
+                            }}
+                            onClick={() => navigate(`/details/${item?.id}`)}
+                          >
+                            See Details
+                          </Button>
+                        </Box>
+                        {/* User Details */}
+                        <Box
+                          sx={{
+                            textAlign: "center",
+                            marginTop: 2,
+                          }}
+                        >
+                          <Avatar
+                            alt="talha"
+                            sx={{
+                              width: 80,
+                              height: 80,
+                              margin: "0 auto",
+                              marginBottom: 2,
+                            }}
+                          />
+                          <Typography variant="h6">
+                            {item?.posted_by?.user?.name}
+                          </Typography>
+                          <Typography variant="body2">
+                            {new Date(item.posted_on).toLocaleDateString()}
+                          </Typography>
+                          <Typography variant="body2">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing
+                            elit. Integer nec odio.
+                          </Typography>
+                        </Box>
+                      </Box>
+                    </CardContent>
                   </Card>
                 </Grid>
               ))
@@ -229,7 +311,6 @@ const UserPosts = () => {
               </Typography>
             )}
           </Grid>
-
           <Box
             sx={{
               display: "flex",

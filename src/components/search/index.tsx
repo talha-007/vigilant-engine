@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { homePageStyles } from "../../pages/styles";
+import { AddCircleOutline } from "@mui/icons-material";
 
 interface Place {
   id: string;
@@ -85,7 +86,25 @@ const SearchComponent: React.FC<SearchComponentProps> = ({ places }) => {
 
         <Grid
           item
-          xs={12}
+          xs={6}
+          md={12}
+          sx={{
+            display: { xs: "flex", md: "none" },
+            alignItems: "end",
+            justifyContent: "flex-end",
+          }}
+        >
+          <Button variant="searchBtn" onClick={() => navigate("/add/post")}>
+            <Box sx={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <AddCircleOutline />
+              Add Post
+            </Box>
+          </Button>
+        </Grid>
+        <Grid
+          item
+          xs={6}
+          md={12}
           sx={{
             display: "flex",
             alignItems: "end",

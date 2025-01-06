@@ -7,7 +7,7 @@ import ChatDrawer from "../chat/index"; // Import the ChatDrawer
 import { AddCircleOutline } from "@mui/icons-material";
 import Cookies from "js-cookie";
 const Layout = () => {
-  const naviagte = useNavigate();
+  const navigate = useNavigate();
   const [openChat, setOpenChat] = useState(false); // State for chat visibility
 
   const handleChatOpen = () => {
@@ -20,9 +20,9 @@ const Layout = () => {
 
   return (
     <>
-      <Navbar />
+      <Navbar position="fixed" />
       <Outlet />
-      <Fab
+      {/* <Fab
         color="primary"
         aria-label="chat"
         sx={{
@@ -30,22 +30,23 @@ const Layout = () => {
           bottom: 16,
           right: 16,
         }}
-        onClick={handleChatOpen}
+        onClick={() => navigate("/chat")}
       >
         <ChatIcon />
-      </Fab>
+      </Fab> */}
       {accessToken && (
         <Fab
-          color="secondary"
+          color="primary"
           aria-label="chat"
           sx={{
             position: "fixed",
             bottom: 16,
-            right: 80,
+            right: 16,
             width: "150px",
             borderRadius: "10px",
+            display: { xs: "none", md: "flex" },
           }}
-          onClick={() => naviagte("/add/post")}
+          onClick={() => navigate("/add/post")}
         >
           <Box sx={{ display: "flex", alignItems: "center", gap: "10px" }}>
             <AddCircleOutline />
@@ -54,7 +55,7 @@ const Layout = () => {
         </Fab>
       )}
       {/* Chat Drawer */}
-      <ChatDrawer open={openChat} onClose={handleChatClose} />
+      {/* <ChatDrawer open={openChat} onClose={handleChatClose} /> */}
     </>
   );
 };
