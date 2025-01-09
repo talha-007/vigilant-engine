@@ -31,7 +31,7 @@ const chatSlice = createSlice({
       state.error = null; // Reset error state
     });
     builder.addCase(getChatRooms.fulfilled, (state, action) => {
-      state.loading = "pending";
+      state.loading = "fulfilled";
       state.data = action.payload; // Reset error state
     });
     builder.addCase(getChatRooms.rejected, (state) => {

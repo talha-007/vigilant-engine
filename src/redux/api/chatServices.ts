@@ -13,6 +13,8 @@ const createRoom = (data: createChat) =>
 const getChatRooms = (email: string) =>
   callAPi.get(`/chat/chat-rooms?email=${email}`);
 
+const retrieveRoom = (id: number) => callAPi.get(`/chat/chat-rooms/${id}`);
+
 const sendMessage = (data: sendChat) =>
   callAPiMultiPart.post("/chat/messages/", data);
 
@@ -20,6 +22,7 @@ const chatServices = {
   createRoom,
   getChatRooms,
   sendMessage,
+  retrieveRoom,
 };
 
 export default chatServices;
