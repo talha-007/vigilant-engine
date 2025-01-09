@@ -27,7 +27,7 @@ import { Add } from "@mui/icons-material";
 import chatServices from "../redux/api/chatServices";
 import { useDispatch, useSelector } from "react-redux";
 import { getChatRooms } from "../redux/slice/chatSlice";
-
+import noChat from "../assets/chat.svg";
 // Dummy data for chats and messages
 
 const ChatPage: React.FC = () => {
@@ -589,10 +589,15 @@ const ChatPage: React.FC = () => {
                       display: "flex",
                       justifyContent: "center",
                       alignItems: "center",
+                      flexDirection: "column",
                       height: "100%",
                     }}
                   >
-                    <Typography>Start Conversation</Typography>
+                    <img src={noChat} alt="" />
+                    <Typography sx={{ fontWeight: "bold", fontSize: "1.2rem" }}>
+                      Pick up where you left off
+                    </Typography>
+                    <Typography>Select a conversation and chat away</Typography>
                   </Box>
                 </Box>
               )}
