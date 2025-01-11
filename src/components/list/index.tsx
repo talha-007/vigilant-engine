@@ -213,7 +213,7 @@ const UserPosts = () => {
                           color: "white",
                           display: "flex",
                           flexDirection: "column",
-                          justifyContent: "space-between",
+                          justifyContent: "space-evenly",
                           padding: 2,
                           transform: "translateY(100%)", // Start hidden below
                           transition: "transform 0.4s ease-in-out",
@@ -273,7 +273,8 @@ const UserPosts = () => {
                           }}
                         >
                           <Avatar
-                            alt="talha"
+                            alt={item?.posted_by?.user?.name}
+                            src={item?.posted_by?.picture}
                             sx={{
                               width: 80,
                               height: 80,
@@ -285,11 +286,18 @@ const UserPosts = () => {
                             {item?.posted_by?.user?.name}
                           </Typography>
                           <Typography variant="body2">
-                            {new Date(item.posted_on).toLocaleDateString()}
+                            {new Date(item?.posted_on).toLocaleDateString()}
                           </Typography>
-                          <Typography variant="body2">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing
-                            elit. Integer nec odio.
+                          <Typography
+                            variant="body2"
+                            noWrap
+                            style={{
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
+                              whiteSpace: "nowrap",
+                            }}
+                          >
+                            {item?.text}
                           </Typography>
                         </Box>
                       </Box>
