@@ -162,8 +162,8 @@ const UserPosts = () => {
 
           <Grid container spacing={2} sx={{ padding: 2 }}>
             {currentPosts?.length > 0 ? (
-              currentPosts?.map((item: any) => (
-                <Grid item xs={12} md={4}>
+              currentPosts?.map((data: any, index) => (
+                <Grid item key={index} xs={12} md={4}>
                   <Card
                     sx={{
                       position: "relative",
@@ -182,24 +182,12 @@ const UserPosts = () => {
                     <CardContent
                       sx={{
                         padding: 0,
-                        height: "300px",
+                        height: "200px",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
                       }}
                     >
-                      {/* Background Image */}
-                      <Box
-                        className="bgImage"
-                        sx={{
-                          width: "100%",
-                          height: "100%",
-                          backgroundImage: `url(${image1})`,
-                          backgroundSize: "cover",
-                          backgroundPosition: "center",
-                          transition: "transform 0.3s ease-in-out",
-                        }}
-                      />
                       {/* Overlay Details */}
                       <Box
                         className="overlay"
@@ -209,15 +197,10 @@ const UserPosts = () => {
                           left: 0,
                           width: "100%",
                           height: "100%",
-                          backgroundColor: "rgba(0, 0, 0, 0.8)",
-                          color: "white",
+
                           display: "flex",
                           flexDirection: "column",
-                          justifyContent: "space-evenly",
                           padding: 2,
-                          transform: "translateY(100%)", // Start hidden below
-                          transition: "transform 0.4s ease-in-out",
-                          overflowY: "auto", // Handle long content
                         }}
                       >
                         {/* Buttons */}
@@ -229,20 +212,15 @@ const UserPosts = () => {
                           }}
                         >
                           {profile?.profile?.profile?.id ===
-                            item?.posted_by?.id && (
+                            data?.posted_by?.id && (
                             <Button
                               variant="outlined"
                               color="primary"
                               size="small"
                               sx={{
                                 backgroundColor: "rgba(255, 255, 255, 0.2)",
-                                borderColor: "white",
-                                color: "white",
-                                "&:hover": {
-                                  backgroundColor: "rgba(255, 255, 255, 0.4)",
-                                },
                               }}
-                              onClick={() => handleOpenEditPostDialogue(item)}
+                              onClick={() => handleOpenEditPostDialogue(data)}
                             >
                               Edit
                             </Button>
@@ -254,13 +232,8 @@ const UserPosts = () => {
                             size="small"
                             sx={{
                               backgroundColor: "rgba(255, 255, 255, 0.2)",
-                              borderColor: "white",
-                              color: "white",
-                              "&:hover": {
-                                backgroundColor: "rgba(255, 255, 255, 0.4)",
-                              },
                             }}
-                            onClick={() => navigate(`/details/${item?.id}`)}
+                            onClick={() => navigate(`/details/${data?.id}`)}
                           >
                             See Details
                           </Button>
@@ -268,37 +241,53 @@ const UserPosts = () => {
                         {/* User Details */}
                         <Box
                           sx={{
-                            textAlign: "center",
+                            textAlign: "left",
                             marginTop: 2,
+                            display: "flex",
+                            gap: "10px",
+                            justifyContent: "start",
                           }}
                         >
                           <Avatar
-                            alt={item?.posted_by?.user?.name}
-                            src={item?.posted_by?.picture}
+                            alt={data?.posted_by?.user?.name}
+                            src={data?.posted_by?.picture}
                             sx={{
-                              width: 80,
-                              height: 80,
-                              margin: "0 auto",
-                              marginBottom: 2,
+                              width: 40,
+                              height: 40,
                             }}
                           />
-                          <Typography variant="h6">
-                            {item?.posted_by?.user?.name}
-                          </Typography>
-                          <Typography variant="body2">
-                            {new Date(item?.posted_on).toLocaleDateString()}
-                          </Typography>
-                          <Typography
-                            variant="body2"
-                            noWrap
-                            style={{
-                              overflow: "hidden",
-                              textOverflow: "ellipsis",
-                              whiteSpace: "nowrap",
+                          <Box
+                            sx={{
+                              display: "flex",
+                              alignItems: "flex-start",
+                              flexDirection: "column",
                             }}
                           >
-                            {item?.text}
-                          </Typography>
+                            <Typography variant="h6">
+                              {data?.posted_by?.user?.name}
+                            </Typography>
+                            <Typography variant="body2">
+                              {new Date(data?.posted_on).toLocaleDateString()}
+                            </Typography>
+                            <Typography
+                              sx={{ fontSize: "13px", fontWeight: "bold" }}
+                            >
+                              {data.travel_to_city}
+                              {", "}
+                              {data.travel_to_country}
+                            </Typography>
+                            <Typography
+                              variant="body2"
+                              noWrap
+                              style={{
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                                whiteSpace: "nowrap",
+                              }}
+                            >
+                              {data?.text}
+                            </Typography>
+                          </Box>
                         </Box>
                       </Box>
                     </CardContent>

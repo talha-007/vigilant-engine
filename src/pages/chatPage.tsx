@@ -28,6 +28,8 @@ import chatServices from "../redux/api/chatServices";
 import { useDispatch, useSelector } from "react-redux";
 import { getChatRooms } from "../redux/slice/chatSlice";
 import noChat from "../assets/chat.svg";
+import Iconify from "../components/iconify";
+import { useNavigate } from "react-router-dom";
 // Dummy data for chats and messages
 
 const ChatPage: React.FC = () => {
@@ -37,22 +39,15 @@ const ChatPage: React.FC = () => {
   const [messageList, setMessageList] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [sendingChat, setSendingChat] = useState(false);
-
-  console.log(
-    "activeChat",
-    activeChat?.participants?.find(
-      (p) => p.profile?.id !== profile?.profile?.profile?.id
-    )
-  );
-
   const [open, setOpen] = useState(false);
   const [view, setView] = useState<"list" | "chat">("list"); // Added state for mobile view
   const [email, setEmail] = useState<string>("");
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const dispatch = useDispatch();
-  console.log("profile", profile);
-  console.log("userChats", userChats);
+  const navigate = useNavigate();
+  // console.log("profile", profile);
+  // console.log("userChats", userChats);
 
   useEffect(() => {
     if (profile?.profile?.email) {
@@ -117,7 +112,7 @@ const ChatPage: React.FC = () => {
         sx={{
           background: "#000",
           width: "100%",
-          height: "100px",
+          height: { md: "100px", xs: "90px" },
         }}
       >
         <Navbar position="static" />
@@ -158,9 +153,24 @@ const ChatPage: React.FC = () => {
                     padding: "0rem 1rem",
                   }}
                 >
-                  <Typography variant="h6" textAlign="center" padding={2}>
-                    Chats
-                  </Typography>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    {" "}
+                    <IconButton
+                      onClick={() => navigate("/")}
+                      sx={{ color: "#637381" }}
+                    >
+                      <Iconify icon="material-symbols:arrow-back-rounded" />
+                    </IconButton>
+                    <Typography variant="h6" textAlign="center" padding={2}>
+                      Chats
+                    </Typography>
+                  </Box>
                   <IconButton onClick={() => setOpen(true)}>
                     <Add />
                   </IconButton>

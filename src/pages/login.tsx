@@ -86,7 +86,8 @@ const LoginPage = () => {
       if (validations()) {
         setIsLoading(true);
         const res = await authServices.login(datas);
-        console.log("res", res);
+        // console.log("res", res);
+
         if (res.status === 200) {
           Cookies.set("userId", res.data.id, {
             path: "/",
@@ -111,6 +112,8 @@ const LoginPage = () => {
     } catch (error) {
       console.log(error);
       toast.error(error?.response?.data?.errors[0]?.detail);
+      // console.log(error?.response?.data?.errors[0]?.detail);
+
       setIsLoading(false);
     }
   };

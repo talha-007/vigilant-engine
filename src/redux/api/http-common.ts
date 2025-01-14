@@ -34,8 +34,7 @@ const processQueue = (error: any, token: string | null = null) => {
 const refreshAccessToken = async () => {
   const refreshToken = Cookies.get("refreshToken");
   if (!refreshToken) {
-    console.error("No refresh token available. Logging out.");
-    handleLogout();
+    console.error("No refresh token available.");
     return null;
   }
 
@@ -53,8 +52,10 @@ const refreshAccessToken = async () => {
 
     return newAccessToken;
   } catch (error) {
-    console.error("Error refreshing access token:", error);
-    handleLogout();
+    console.error(
+      "Error refreshing access token:",
+      error.response?.data || error.message
+    );
     return null;
   }
 };
@@ -73,12 +74,6 @@ callAPi.interceptors.request.use(attachAuthorizationHeader, (error) =>
 callAPiMultiPart.interceptors.request.use(attachAuthorizationHeader, (error) =>
   Promise.reject(error)
 );
-
-const handleLogout = () => {
-  Cookies.remove("accessToken");
-  Cookies.remove("refreshToken");
-  window.location.href = "/login"; // Redirect to login page
-};
 
 const responseInterceptor = async (error: any) => {
   const originalRequest = error.config;
@@ -101,7 +96,6 @@ const responseInterceptor = async (error: any) => {
     try {
       const newAccessToken = await refreshAccessToken();
       if (!newAccessToken) {
-        handleLogout();
         return Promise.reject("Unable to refresh token. Logging out.");
       }
 
@@ -110,27 +104,33 @@ const responseInterceptor = async (error: any) => {
       return axios(originalRequest);
     } catch (err) {
       processQueue(err, null);
-      handleLogout();
       return Promise.reject(err);
     } finally {
       isRefreshing = false;
     }
   }
 
-  return Promise.reject(error);
+  // If the error is not a 401 or retry has failed, propagate the original error.
+  return Promise.reject(error.response?.data || error.message);
 };
 
-callAPi.interceptors.response.use((response) => response, responseInterceptor);
+callAPi.interceptors.response.use(
+  (response) => response,
+  (error) => responseInterceptor(error)
+);
+
 callAPiMultiPart.interceptors.response.use(
   (response) => response,
-  responseInterceptor
+  (error) => responseInterceptor(error)
 );
 
 export const scheduleTokenRefresh = () => {
   setInterval(async () => {
     try {
-      await refreshAccessToken();
-      console.log("Access token refreshed successfully.");
+      const token = await refreshAccessToken();
+      if (token) {
+        console.log("Access token refreshed successfully.");
+      }
     } catch (err) {
       console.error("Error refreshing access token:", err);
     }

@@ -145,23 +145,31 @@ const AddPost = () => {
 
   const handleAddPost = async () => {
     if (validations()) {
-      const datas = {
-        ...formData,
-        travel_to_country: formData.country,
-        travel_to_city: formData.city,
-        date_from: formData.departureDate,
-        date_to: formData.returnDate,
-        images: imageFiles,
-      };
+      const postData = new FormData();
+      postData.append("title", formData.title);
+      postData.append("travel_to_country", formData.country);
+      postData.append("travel_to_city", formData.city);
+      //        formData.append("postalCode", formData.postalCode);
+      //      formData.append("place", formData.place);
+      postData.append("date_from", formData.departureDate);
+      postData.append("date_to", formData.returnDate);
+      postData.append("text", formData.text);
+      postData.append("gender", formData.gender);
+
+      // Append all images
+      imageFiles.forEach((file) => {
+        postData.append("images", file); // Same key for multiple files
+      });
+
       try {
         setIsLoading(true);
-        const res = await postServices.createPost(datas);
-        console.log(res);
+        const res = await postServices.createPost(postData); // Assuming postServices.createPost handles FormData
         if (res.status === 201) {
           setIsLoading(false);
-          toast.success("post created successfully");
+          toast.success("Post created successfully");
           setFormData(initialValues);
-          setPreviewImages("");
+          setPreviewImages([]);
+          setImageFiles([]);
           navigate(-1);
           dispatch(get_AllPosts());
         }

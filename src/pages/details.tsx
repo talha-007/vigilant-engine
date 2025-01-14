@@ -10,7 +10,6 @@ import {
   Button,
   IconButton,
   Stack,
-  CircularProgress,
 } from "@mui/material";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -37,28 +36,13 @@ const Details: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const postData = useSelector((s) => s?.posts);
-  const countries = useSelector((state) => state?.filter);
-  const cities = useSelector((state) => state?.filter?.cities) || [];
-  const images = postData?.post?.images;
-  const countryId = postData?.post?.travel_to_country;
-  const cityId = postData?.post?.travel_to_city;
-  console.log("postData", postData);
-
-  // Filtered country and city names based on IDs
-  const countryName =
-    countries?.data?.find((country) => country?.id === countryId)?.name ||
-    "N/A";
-  const cityName = cities?.find((city) => city?.id === cityId)?.name || "N/A";
+  const tempimages = postData?.post?.images;
+  console.log(tempimages);
+  const images = dummyImages;
 
   useEffect(() => {
     dispatch(get_post(id));
-    dispatch(get_AllCountries());
   }, [id, dispatch]);
-  useEffect(() => {
-    if (countryId) {
-      dispatch(getCitiesByCId(countryId));
-    }
-  }, [countryId]);
 
   return (
     <>
@@ -94,69 +78,59 @@ const Details: React.FC = () => {
                 boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)",
               }}
             >
-              {postData?.loading === "pending" ? (
+              <CardContent>
                 <Box
                   sx={{
                     display: "flex",
-                    justifyContent: "center",
+                    justifyContent: "space-between",
                     alignItems: "center",
                   }}
                 >
-                  <CircularProgress />
-                </Box>
-              ) : (
-                <CardContent>
                   <Box
                     sx={{
+                      width: "100%",
                       display: "flex",
-                      justifyContent: "space-between",
+                      justifyContent: "start",
                       alignItems: "center",
+                      gap: "10px",
                     }}
                   >
-                    <Box
+                    <Avatar
+                      alt="talha"
+                      src={postData.post.posted_by.picture}
                       sx={{
-                        width: "100%",
-                        display: "flex",
-                        justifyContent: "start",
-                        alignItems: "center",
-                        gap: "10px",
+                        width: 50,
+                        height: 50,
                       }}
-                    >
-                      <Avatar
-                        alt={postData?.post?.posted_by?.user?.name}
-                        src={postData?.post?.posted_by?.picture}
-                        sx={{
-                          width: 50,
-                          height: 50,
-                        }}
-                      />
-                      <Stack>
-                        <Typography variant="h5">
-                          {postData?.post?.posted_by?.user?.name}
-                        </Typography>
+                    />
+                    <Stack>
+                      <Typography variant="h5">
+                        {postData?.post?.posted_by?.user?.name}
+                      </Typography>
+                      <Typography variant="body2" sx={{ fontSize: "14px" }}>
+                        {new Date(
+                          postData?.post?.posted_on
+                        ).toLocaleDateString()}
+                      </Typography>
+                      <Box>
                         <Typography variant="body2" sx={{ fontSize: "14px" }}>
-                          {new Date(
-                            postData?.post?.posted_on
-                          ).toLocaleDateString()}
+                          Travelling to {postData.post.travel_to_city},{" "}
+                          {postData.post.travel_to_country}
                         </Typography>
-                        <Box>
-                          <Typography variant="body2" sx={{ fontSize: "14px" }}>
-                            Travelling to {cityName},{countryName}{" "}
-                          </Typography>
-                        </Box>
-                      </Stack>
-                    </Box>
-                    <Button
-                      variant="outlined"
-                      startIcon={<ArrowBackIcon />}
-                      onClick={() => navigate(-1)}
-                      sx={{ fontWeight: "bold" }}
-                    >
-                      Back
-                    </Button>
+                      </Box>
+                    </Stack>
                   </Box>
-                  <Grid container spacing={2} mt={2}>
-                    {/* <Grid item xs={6}>
+                  <Button
+                    variant="outlined"
+                    startIcon={<ArrowBackIcon />}
+                    onClick={() => navigate(-1)}
+                    sx={{ fontWeight: "bold" }}
+                  >
+                    Back
+                  </Button>
+                </Box>
+                <Grid container spacing={2} mt={2}>
+                  {/* <Grid item xs={6}>
                     <Typography variant="body1">
                       <strong>Gender:</strong>{" "}
                       {postData?.post?.posted_by?.gender === 1
@@ -164,72 +138,68 @@ const Details: React.FC = () => {
                         : "Female"}
                     </Typography>
                   </Grid> */}
-                    <Grid item xs={12}>
-                      <Box>
-                        <Typography variant="body1">
-                          <span style={{ fontWeight: "600" }}>From</span>{" "}
-                          {postData?.post?.date_from} -{" "}
-                          <span style={{ fontWeight: "600" }}>To</span>{" "}
-                          {postData?.post?.date_to}
-                        </Typography>
-                      </Box>
-                    </Grid>
-                    <Grid item xs={12}>
+                  <Grid item xs={12}>
+                    <Box>
                       <Typography variant="body1">
-                        {postData?.post?.text}
+                        <span style={{ fontWeight: "600" }}>From</span>{" "}
+                        {postData?.post?.date_from} -{" "}
+                        <span style={{ fontWeight: "600" }}>To</span>{" "}
+                        {postData?.post?.date_to}
                       </Typography>
-                    </Grid>
-                    <Grid item xs={12}>
-                      {postData?.post?.images?.length === 0 ? (
-                        <Typography>No Images</Typography>
-                      ) : (
-                        <Swiper
-                          navigation
-                          pagination={{ clickable: true }}
-                          loop
-                          autoplay={{
-                            delay: 3000, // Delay in milliseconds
-                            disableOnInteraction: false, // Prevent autoplay from stopping on interaction
-                          }}
-                          effect={"creative"}
-                          creativeEffect={{
-                            prev: {
-                              shadow: true,
-                              translate: [0, 0, -400],
-                            },
-                            next: {
-                              translate: ["100%", 0, 0],
-                            },
-                          }}
-                          modules={[
-                            Autoplay,
-                            Navigation,
-                            Pagination,
-                            EffectCreative,
-                          ]}
-                          style={{ borderRadius: "16px", overflow: "hidden" }}
-                        >
-                          {images?.map((item, index) => (
-                            <SwiperSlide key={index}>
-                              <Box
-                                component="img"
-                                src={item?.image}
-                                alt={`Post image ${index + 1}`}
-                                sx={{
-                                  width: "100%",
-                                  height: "500px",
-                                  objectFit: "cover",
-                                  borderRadius: "16px",
-                                }}
-                              />
-                            </SwiperSlide>
-                          ))}
-                        </Swiper>
-                      )}
-                    </Grid>
+                      <img src={postData?.post?.posted_by?.picture}></img>
+                    </Box>
                   </Grid>
-                </CardContent>
-              )}
+                  <Grid item xs={12}>
+                    <Typography variant="body1">
+                      {postData?.post?.text}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Swiper
+                      navigation
+                      pagination={{ clickable: true }}
+                      loop
+                      autoplay={{
+                        delay: 3000, // Delay in milliseconds
+                        disableOnInteraction: false, // Prevent autoplay from stopping on interaction
+                      }}
+                      effect={"creative"}
+                      creativeEffect={{
+                        prev: {
+                          shadow: true,
+                          translate: [0, 0, -400],
+                        },
+                        next: {
+                          translate: ["100%", 0, 0],
+                        },
+                      }}
+                      modules={[
+                        Autoplay,
+                        Navigation,
+                        Pagination,
+                        EffectCreative,
+                      ]}
+                      style={{ borderRadius: "16px", overflow: "hidden" }}
+                    >
+                      {images.map((item, index) => (
+                        <SwiperSlide key={index}>
+                          <Box
+                            component="img"
+                            src={item}
+                            alt={`Post image ${index + 1}`}
+                            sx={{
+                              width: "100%",
+                              height: "500px",
+                              objectFit: "cover",
+                              borderRadius: "16px",
+                            }}
+                          />
+                        </SwiperSlide>
+                      ))}
+                    </Swiper>
+                  </Grid>
+                </Grid>
+              </CardContent>
             </Card>
           </Grid>
         </Grid>
