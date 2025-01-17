@@ -13,8 +13,6 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
   body,
   title,
 }) => {
-  console.log("body", body);
-
   const handleChange = (content: string) => {
     setBody({
       ...body,

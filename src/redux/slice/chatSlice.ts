@@ -12,7 +12,7 @@ export const getChatRooms = createAsyncThunk(
   async (email: string) => {
     try {
       const res = await chatServices.getChatRooms(email);
-      console.log(res);
+      
       return res.data;
     } catch (error) {
       console.log(error);

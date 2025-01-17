@@ -17,49 +17,6 @@ export const callAPiMultiPart = axios.create({
   },
 });
 
-let isRefreshing = false;
-let failedQueue: any[] = [];
-
-const processQueue = (error: any, token: string | null = null) => {
-  failedQueue.forEach((prom) => {
-    if (token) {
-      prom.resolve(token);
-    } else {
-      prom.reject(error);
-    }
-  });
-  failedQueue = [];
-};
-
-const refreshAccessToken = async () => {
-  const refreshToken = Cookies.get("refreshToken");
-  if (!refreshToken) {
-    console.error("No refresh token available.");
-    return null;
-  }
-
-  try {
-    const response = await axios.post(`${API_URL}/auth/jwt/refresh/`, {
-      refresh: refreshToken,
-    });
-    const newAccessToken = response.data.access;
-
-    Cookies.set("accessToken", newAccessToken, {
-      path: "/",
-      secure: true,
-      sameSite: "strict",
-    });
-
-    return newAccessToken;
-  } catch (error) {
-    console.error(
-      "Error refreshing access token:",
-      error.response?.data || error.message
-    );
-    return null;
-  }
-};
-
 const attachAuthorizationHeader = (config: any) => {
   const accessToken = Cookies.get("accessToken");
   if (accessToken) {
@@ -68,6 +25,7 @@ const attachAuthorizationHeader = (config: any) => {
   return config;
 };
 
+// Attach request interceptors
 callAPi.interceptors.request.use(attachAuthorizationHeader, (error) =>
   Promise.reject(error)
 );
@@ -75,64 +33,56 @@ callAPiMultiPart.interceptors.request.use(attachAuthorizationHeader, (error) =>
   Promise.reject(error)
 );
 
-const responseInterceptor = async (error: any) => {
+// Add response interceptors to handle token expiration
+const handleTokenExpiration = async (error: any) => {
   const originalRequest = error.config;
 
-  if (error.response?.status === 401 && !originalRequest._retry) {
-    if (isRefreshing) {
-      return new Promise((resolve, reject) => {
-        failedQueue.push({ resolve, reject });
-      })
-        .then((token) => {
-          originalRequest.headers.Authorization = `JWT ${token}`;
-          return axios(originalRequest);
-        })
-        .catch((err) => Promise.reject(err));
-    }
-
+  if (
+    error.response &&
+    error.response.data &&
+    error.response.data.errors &&
+    error.response.data.errors.some(
+      (err: any) => err.code === "token_not_valid"
+    ) &&
+    !originalRequest._retry
+  ) {
     originalRequest._retry = true;
-    isRefreshing = true;
 
     try {
-      const newAccessToken = await refreshAccessToken();
-      if (!newAccessToken) {
-        return Promise.reject("Unable to refresh token. Logging out.");
-      }
+      // Send refresh token API
+      const refreshToken = Cookies.get("refreshToken");
+      const response = await axios.post(`${API_URL}/auth/jwt/refresh/`, {
+        refresh: refreshToken,
+      });
 
-      processQueue(null, newAccessToken);
+      const newAccessToken = response.data.access;
+      Cookies.set("accessToken", newAccessToken); // Save the new access token in cookies
+
+      // Update the Authorization header in the original request
       originalRequest.headers.Authorization = `JWT ${newAccessToken}`;
-      return axios(originalRequest);
-    } catch (err) {
-      processQueue(err, null);
-      return Promise.reject(err);
-    } finally {
-      isRefreshing = false;
+
+      // Retry the original request
+      return callAPi(originalRequest);
+    } catch (refreshError) {
+      console.error("Failed to refresh token:", refreshError);
+      // Optionally, handle logout or token refresh failure
+      Cookies.remove("accessToken");
+      Cookies.remove("refreshToken");
+      window.location.href = "/login"; // Redirect to login
+      return Promise.reject(refreshError);
     }
   }
 
-  // If the error is not a 401 or retry has failed, propagate the original error.
-  return Promise.reject(error.response?.data || error.message);
+  return Promise.reject(error);
 };
 
+// Attach response interceptors
 callAPi.interceptors.response.use(
   (response) => response,
-  (error) => responseInterceptor(error)
+  handleTokenExpiration
 );
 
 callAPiMultiPart.interceptors.response.use(
   (response) => response,
-  (error) => responseInterceptor(error)
+  handleTokenExpiration
 );
-
-export const scheduleTokenRefresh = () => {
-  setInterval(async () => {
-    try {
-      const token = await refreshAccessToken();
-      if (token) {
-        console.log("Access token refreshed successfully.");
-      }
-    } catch (err) {
-      console.error("Error refreshing access token:", err);
-    }
-  }, 8 * 60 * 1000); // 8 minutes
-};

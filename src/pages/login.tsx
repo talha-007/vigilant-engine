@@ -82,7 +82,7 @@ const LoginPage = () => {
         email: values.email,
         password: values.password,
       };
-      console.log("datas", datas);
+
       if (validations()) {
         setIsLoading(true);
         const res = await authServices.login(datas);

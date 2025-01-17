@@ -1,6 +1,6 @@
 import { callAPi, callAPiMultiPart } from "./http-common";
 
-interface CreatePost {
+interface Post {
   travel_to_country: number | null; // Allows for null in case the value is optional
   travel_to_city: number | null; // Allows for null in case the value is optional
   date_from: string; // Use string if storing dates as ISO strings
@@ -16,8 +16,10 @@ const filterCountryByName = (key: string) =>
   callAPi.get(`reisapp/countries/?name__startswith=${key}`);
 const filterCityByCountryId = (id: number) =>
   callAPi.get(`reisapp/cities/?country=${id}`);
-const createPost = (data: CreatePost) =>
+const createPost = (data: Post) =>
   callAPiMultiPart.post(`/reisapp/posts/`, data);
+const editPost = (id: number, data) =>
+  callAPiMultiPart.patch(`/reisapp/posts/${id}`, data);
 
 const postServices = {
   getAllPosts,
@@ -26,5 +28,6 @@ const postServices = {
   getAllCountries,
   filterCityByCountryId,
   filterCountryByName,
+  editPost,
 };
 export default postServices;

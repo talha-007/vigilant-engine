@@ -8,6 +8,7 @@ import RegisterPage from "./pages/register";
 import Details from "./pages/details";
 import AddPost from "./pages/addPost";
 import ChatPage from "./pages/chatPage";
+import EditPost from "./pages/editPost";
 
 export default function Router() {
   const routes = useRoutes([
@@ -21,6 +22,7 @@ export default function Router() {
     },
     { path: "details/:id", element: <Details /> },
     { path: "add/post", element: <AddPost /> },
+    { path: "edit/post/:id", element: <EditPost /> },
     {
       path: "/login",
       element: <LoginPage />,

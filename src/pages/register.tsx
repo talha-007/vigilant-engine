@@ -133,11 +133,9 @@ const RegisterPage = () => {
         name: values.first_name + values.last_name,
       };
 
-      console.log("datas", datas);
       if (validations()) {
         setIsLoading(true);
         const res = await authServices.signUp(datas);
-        console.log("res", res);
         if (res.status === 201) {
           toast.success("Verification email has been sent to your email");
           setIsLoading(false);
@@ -147,7 +145,7 @@ const RegisterPage = () => {
     } catch (error) {
       console.log(error);
       setIsLoading(false);
-      toast.error(error?.response?.data?.errors[0]?.detail);
+      toast.error(error?.errors[0]?.detail);
     }
   };
   return (

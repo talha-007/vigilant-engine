@@ -37,7 +37,7 @@ const Details: React.FC = () => {
   const dispatch = useDispatch();
   const postData = useSelector((s) => s?.posts);
   const tempimages = postData?.post?.images;
-  console.log(tempimages);
+
   const images = dummyImages;
 
   useEffect(() => {
@@ -96,8 +96,8 @@ const Details: React.FC = () => {
                     }}
                   >
                     <Avatar
-                      alt="talha"
-                      src={postData.post.posted_by.picture}
+                      alt={postData?.post?.posted_by?.user?.name}
+                      src={postData?.post?.posted_by?.picture}
                       sx={{
                         width: 50,
                         height: 50,

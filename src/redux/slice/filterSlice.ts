@@ -13,7 +13,7 @@ export const get_AllCountries = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const res = await postServices.getAllCountries();
-      console.log(res);
+
       return res.data; // Only return the serializable data
     } catch (error) {
       console.error(error);
@@ -28,7 +28,7 @@ export const getCitiesByCId = createAsyncThunk(
   async (id: number) => {
     try {
       const res = await postServices.filterCityByCountryId(id);
-      console.log(res);
+
       return res.data; // Only return the serializable data
     } catch (error) {
       console.error(error);

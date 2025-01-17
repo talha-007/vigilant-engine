@@ -9,7 +9,7 @@ import { homePageStyles } from "./styles";
 const HomePage: React.FC = () => {
   const dispatch = useDispatch();
   const getCountries = useSelector((state) => state.filter);
-  console.log("getAllCountries", getCountries);
+
   useEffect(() => {
     dispatch(get_AllCountries());
   }, []);

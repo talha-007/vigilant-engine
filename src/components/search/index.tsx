@@ -29,7 +29,6 @@ const SearchComponent: React.FC<SearchComponentProps> = ({ places }) => {
       navigate(`/list?to=${to}`); // Pass the ID in the query params
     }
   };
-  console.log("places", places);
 
   return (
     <Box sx={homePageStyles.searchBox}>

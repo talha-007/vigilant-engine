@@ -15,8 +15,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { get_AllCountries, getCitiesByCId } from "../redux/slice/filterSlice";
 import postServices from "../redux/api/postService";
-import { get_AllPosts } from "../redux/slice/postsSlice";
-import { useNavigate } from "react-router-dom";
+import { get_AllPosts, get_post } from "../redux/slice/postsSlice";
+import { useNavigate, useParams } from "react-router-dom";
 
 import DeleteIcon from "@mui/icons-material/Delete";
 import { addPostStyles } from "./styles";
@@ -45,7 +45,9 @@ const initialValues = {
   gender: "",
   images: [],
 };
-const AddPost = () => {
+const EditPost = () => {
+  const { id } = useParams();
+
   const [formData, setFormData] = useState(initialValues);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [previewImages, setPreviewImages] = React.useState<string[]>([]);
@@ -57,12 +59,19 @@ const AddPost = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const getCountries = useSelector((state) => state.filter);
-
   const cities = useSelector((s) => s.filter) || [];
+  const countryId = Array.isArray(getCountries?.data)
+    ? getCountries?.data?.find((item: any) => item.name === formData.country)
+    : null;
 
   useEffect(() => {
-    dispatch(get_AllCountries());
+    try {
+      dispatch(get_AllCountries());
+    } catch (err) {
+      console.log(err);
+    }
   }, []);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
@@ -71,10 +80,42 @@ const AddPost = () => {
 
   useEffect(() => {
     if (formData.country) {
-      dispatch(getCitiesByCId(formData.country));
+      try {
+        dispatch(getCitiesByCId(countryId.id));
+      } catch (err) {
+        console.log(err);
+      }
     }
   }, [formData.country]);
+  useEffect(() => {
+    if (id) {
+      fetchData();
+    }
+  }, [id]);
+  const fetchData = async () => {
+    try {
+      const res = await postServices.getPost(id);
 
+      if (res.status === 200) {
+        setFormData({
+          title: res?.data?.title || "",
+          country: res?.data?.travel_to_country || "",
+          city: res?.data?.travel_to_city || "",
+          postalCode: res?.data?.travel_to_postal_code || "",
+          place: res?.data?.title || "",
+          departureDate: res?.data?.date_from || "",
+          returnDate: res?.data?.date_to || "",
+          text: res?.data?.text || "",
+          gender: res?.data?.posted_by?.gender || "",
+          images: res?.data?.images || [],
+        });
+        setPreviewImages(res?.data?.images || []);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("something went wrong cannot fetch data");
+    }
+  };
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files) {
@@ -159,26 +200,26 @@ const AddPost = () => {
       imageFiles.forEach((file) => {
         postData.append("images", file); // Same key for multiple files
       });
+      const ID = parseInt(id);
 
       try {
         setIsLoading(true);
-        const res = await postServices.createPost(postData); // Assuming postServices.createPost handles FormData
-        if (res.status === 201) {
+        const res = await postServices.editPost(ID, postData); // Assuming postServices.createPost handles FormData
+
+        if (res.status === 200) {
           setIsLoading(false);
-          toast.success("Post created successfully");
+          toast.success("Post updated successfully");
           setFormData(initialValues);
           setPreviewImages([]);
           setImageFiles([]);
           navigate(-1);
           dispatch(get_AllPosts());
-        } else {
-          setIsLoading(false);
         }
       } catch (error) {
-        // console.error(error?.response?.data?.errors[0]);
+        console.error(error);
         toast.error(
           `${error?.response?.data?.errors[0]?.detail} (${error?.response?.data?.errors[0]?.attr})
-          `
+                  `
         );
         setIsLoading(false);
       }
@@ -204,7 +245,7 @@ const AddPost = () => {
       <Container sx={{ padding: "5rem 0rem" }}>
         <Box>
           <Box sx={addPostStyles.header}>
-            <Typography variant="h3">Add New Post</Typography>
+            <Typography variant="h3">Edit Post</Typography>
             <Button variant="contained" onClick={() => navigate(-1)}>
               {" "}
               Back
@@ -227,7 +268,7 @@ const AddPost = () => {
             </Grid>
             <Grid item xs={12} md={4}>
               <Autocomplete
-                sx={{ width: "100%" }} // Ensure it spans the full grid width
+                sx={{ width: "100%" }}
                 open={openCountry}
                 onOpen={handleOpenCountry}
                 onClose={handleCloseCountry}
@@ -237,9 +278,11 @@ const AddPost = () => {
                 getOptionLabel={(option) => option.name || ""}
                 options={getCountries?.data || []}
                 value={
-                  getCountries?.data?.find(
-                    (item: any) => item.id === formData.country
-                  ) || null
+                  Array.isArray(getCountries?.data)
+                    ? getCountries?.data?.find(
+                        (item: any) => item.id === formData.country
+                      )
+                    : null
                 }
                 onChange={(event, newValue) => {
                   handleChange({
@@ -257,12 +300,12 @@ const AddPost = () => {
                     InputProps={{
                       ...params.InputProps,
                       endAdornment: (
-                        <React.Fragment>
+                        <>
                           {loading ? (
                             <CircularProgress color="inherit" size={20} />
                           ) : null}
                           {params.InputProps.endAdornment}
-                        </React.Fragment>
+                        </>
                       ),
                     }}
                   />
@@ -273,7 +316,7 @@ const AddPost = () => {
             <Grid item xs={12} md={4}>
               {" "}
               <Autocomplete
-                sx={{ width: "100%" }} // Ensure it spans the full grid width
+                sx={{ width: "100%" }}
                 open={openCity}
                 onOpen={handleOpenCity}
                 onClose={handleCloseCity}
@@ -281,11 +324,13 @@ const AddPost = () => {
                   option.id === value?.id
                 }
                 getOptionLabel={(option) => option.name || ""}
-                options={cities?.cities || []}
+                options={Array.isArray(cities?.cities) ? cities.cities : []}
                 value={
-                  cities?.cities?.find(
-                    (item: any) => item.id === formData.city
-                  ) || null
+                  Array.isArray(cities?.cities)
+                    ? cities.cities.find(
+                        (item: any) => item.id === formData.city
+                      ) || null
+                    : null
                 }
                 onChange={(event, newValue) => {
                   handleChange({
@@ -296,19 +341,19 @@ const AddPost = () => {
                 renderInput={(params) => (
                   <TextField
                     {...params}
-                    label="city"
+                    label="City"
                     variant="outlined"
                     error={Boolean(errors.city)}
                     helperText={errors.city}
                     InputProps={{
                       ...params.InputProps,
                       endAdornment: (
-                        <React.Fragment>
+                        <>
                           {loading ? (
                             <CircularProgress color="inherit" size={20} />
                           ) : null}
                           {params.InputProps.endAdornment}
-                        </React.Fragment>
+                        </>
                       ),
                     }}
                   />
@@ -460,7 +505,7 @@ const AddPost = () => {
             <Grid item xs={12}>
               {" "}
               <Button variant="contained" size="large" onClick={handleAddPost}>
-                {isLoading ? "loading..." : "Add Post"}
+                {isLoading ? "loading..." : "Edit Post"}
               </Button>
             </Grid>
           </Grid>
@@ -470,4 +515,4 @@ const AddPost = () => {
   );
 };
 
-export default AddPost;
+export default EditPost;

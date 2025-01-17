@@ -37,7 +37,7 @@ function Navbar({ position }) {
   const [scrolled, setScrolled] = React.useState(false);
 
   const profile = useSelector((s) => s?.profile);
-  console.log("profile", profile);
+  // console.log("profile", profile);
   React.useEffect(() => {
     dispatch(get_profile());
   }, []);

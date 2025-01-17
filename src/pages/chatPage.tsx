@@ -46,8 +46,6 @@ const ChatPage: React.FC = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  // console.log("profile", profile);
-  // console.log("userChats", userChats);
 
   useEffect(() => {
     if (profile?.profile?.email) {
@@ -94,13 +92,16 @@ const ChatPage: React.FC = () => {
     }
   };
 
-  const handleStartChat = () => {
+  const handleStartChat = async () => {
     const datas = {
       second_participant: email,
     };
     try {
-      const res = chatServices.createRoom(datas);
-      console.log(res);
+      const res = await chatServices.createRoom(datas);
+
+      if (res.status === 200) {
+        setOpen(false);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -190,7 +191,6 @@ const ChatPage: React.FC = () => {
                           button
                           selected={activeChat?.id === chat?.id}
                           onClick={() => {
-                            console.log("ListItem clicked", chat);
                             setActiveChat(chat);
                             setView("chat"); // Switch to chat view
                             setMessageList(chat.messages);
@@ -406,7 +406,6 @@ const ChatPage: React.FC = () => {
                           button
                           selected={activeChat?.id === chat?.id}
                           onClick={() => {
-                            console.log("ListItem clicked", chat);
                             setActiveChat(chat);
                             setView("chat"); // Switch to chat view
                             setMessageList(chat.messages);
