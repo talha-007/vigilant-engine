@@ -60,9 +60,6 @@ const EditPost = () => {
   const navigate = useNavigate();
   const getCountries = useSelector((state) => state.filter);
   const cities = useSelector((s) => s.filter) || [];
-  const countryId = Array.isArray(getCountries?.data)
-    ? getCountries?.data?.find((item: any) => item.name === formData.country)
-    : null;
 
   useEffect(() => {
     try {
@@ -81,7 +78,7 @@ const EditPost = () => {
   useEffect(() => {
     if (formData.country) {
       try {
-        dispatch(getCitiesByCId(countryId.id));
+        dispatch(getCitiesByCId(formData.country));
       } catch (err) {
         console.log(err);
       }
@@ -99,8 +96,8 @@ const EditPost = () => {
       if (res.status === 200) {
         setFormData({
           title: res?.data?.title || "",
-          country: res?.data?.travel_to_country || "",
-          city: res?.data?.travel_to_city || "",
+          country: res?.data?.travel_to_country?.id || "",
+          city: res?.data?.travel_to_city?.id || "",
           postalCode: res?.data?.travel_to_postal_code || "",
           place: res?.data?.title || "",
           departureDate: res?.data?.date_from || "",
@@ -226,6 +223,10 @@ const EditPost = () => {
     }
   };
   const dummyImage = "https://via.placeholder.com/150?text=No+Image+Uploaded";
+  console.log(
+    "formadata",
+    getCountries?.data?.find((item: any) => item.id === formData.country)
+  );
 
   return (
     <>
@@ -275,7 +276,7 @@ const EditPost = () => {
                 isOptionEqualToValue={(option, value) =>
                   option.id === value?.id
                 }
-                getOptionLabel={(option) => option.name || ""}
+                getOptionLabel={(option) => option?.name || ""}
                 options={getCountries?.data || []}
                 value={
                   Array.isArray(getCountries?.data)
