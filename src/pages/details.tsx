@@ -114,8 +114,8 @@ const Details: React.FC = () => {
                       </Typography>
                       <Box>
                         <Typography variant="body2" sx={{ fontSize: "14px" }}>
-                          Travelling to {postData.post.travel_to_city},{" "}
-                          {postData.post.travel_to_country}
+                          Travelling to {postData?.post?.travel_to_city},{" "}
+                          {postData?.post?.travel_to_country}
                         </Typography>
                       </Box>
                     </Stack>
@@ -146,7 +146,6 @@ const Details: React.FC = () => {
                         <span style={{ fontWeight: "600" }}>To</span>{" "}
                         {postData?.post?.date_to}
                       </Typography>
-                      <img src={postData?.post?.posted_by?.picture}></img>
                     </Box>
                   </Grid>
                   <Grid item xs={12}>
