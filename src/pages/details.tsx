@@ -39,6 +39,7 @@ const Details: React.FC = () => {
   const tempimages = postData?.post?.images;
 
   const images = dummyImages;
+  console.log(postData?.post?.travel_to_city);
 
   useEffect(() => {
     dispatch(get_post(id));
@@ -114,8 +115,8 @@ const Details: React.FC = () => {
                       </Typography>
                       <Box>
                         <Typography variant="body2" sx={{ fontSize: "14px" }}>
-                          Travelling to {postData?.post?.travel_to_city},{" "}
-                          {postData?.post?.travel_to_country}
+                          Travelling to {postData?.post?.travel_to_city?.name},{" "}
+                          {postData?.post?.travel_to_country?.name}
                         </Typography>
                       </Box>
                     </Stack>
@@ -180,7 +181,7 @@ const Details: React.FC = () => {
                       ]}
                       style={{ borderRadius: "16px", overflow: "hidden" }}
                     >
-                      {images.map((item, index) => (
+                      {tempimages?.map((item, index) => (
                         <SwiperSlide key={index}>
                           <Box
                             component="img"
