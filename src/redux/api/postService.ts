@@ -19,7 +19,7 @@ const filterCityByCountryId = (id: number) =>
 const createPost = (data: Post) =>
   callAPiMultiPart.post(`/reisapp/posts/`, data);
 const editPost = (id: number, data) =>
-  callAPiMultiPart.patch(`/reisapp/posts/${id}`, data);
+  callAPiMultiPart.put(`/reisapp/posts/${id}`, data);
 
 const postServices = {
   getAllPosts,

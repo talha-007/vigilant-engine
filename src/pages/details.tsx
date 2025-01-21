@@ -64,22 +64,61 @@ const Details: React.FC = () => {
         sx={{
           maxWidth: 1200,
           margin: "auto",
-          marginTop: "8rem",
+          marginTop: "6rem",
           padding: 3,
           borderRadius: "16px",
         }}
       >
-        <Grid container spacing={4}>
-          {/* Details Section */}
-          <Grid item xs={12}>
-            <Card
-              sx={{
-                padding: 3,
-                borderRadius: "16px",
-                boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)",
-              }}
-            >
-              <CardContent>
+        <Card
+          sx={{
+            padding: 3,
+            borderRadius: "16px",
+            boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)",
+          }}
+        >
+          <CardContent>
+            <Grid container spacing={2}>
+              {/* Details Section */}
+              <Grid item xs={12} md={6}>
+                <Swiper
+                  navigation
+                  pagination={{ clickable: true }}
+                  loop
+                  autoplay={{
+                    delay: 3000, // Delay in milliseconds
+                    disableOnInteraction: false, // Prevent autoplay from stopping on interaction
+                  }}
+                  effect={"creative"}
+                  creativeEffect={{
+                    prev: {
+                      shadow: true,
+                      translate: [0, 0, -400],
+                    },
+                    next: {
+                      translate: ["100%", 0, 0],
+                    },
+                  }}
+                  modules={[Autoplay, Navigation, Pagination, EffectCreative]}
+                  style={{ borderRadius: "16px", overflow: "hidden" }}
+                >
+                  {tempimages?.map((item, index) => (
+                    <SwiperSlide key={index}>
+                      <Box
+                        component="img"
+                        src={item}
+                        alt={`Post image ${index + 1}`}
+                        sx={{
+                          width: "100%",
+                          height: "500px",
+                          objectFit: "cover",
+                          borderRadius: "16px",
+                        }}
+                      />
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
+              </Grid>
+              <Grid item xs={12} md={6}>
                 <Box
                   sx={{
                     display: "flex",
@@ -131,14 +170,6 @@ const Details: React.FC = () => {
                   </Button>
                 </Box>
                 <Grid container spacing={2} mt={2}>
-                  {/* <Grid item xs={6}>
-                    <Typography variant="body1">
-                      <strong>Gender:</strong>{" "}
-                      {postData?.post?.posted_by?.gender === 1
-                        ? "Male"
-                        : "Female"}
-                    </Typography>
-                  </Grid> */}
                   <Grid item xs={12}>
                     <Box>
                       <Typography variant="body1">
@@ -154,55 +185,11 @@ const Details: React.FC = () => {
                       {postData?.post?.text}
                     </Typography>
                   </Grid>
-                  <Grid item xs={12}>
-                    <Swiper
-                      navigation
-                      pagination={{ clickable: true }}
-                      loop
-                      autoplay={{
-                        delay: 3000, // Delay in milliseconds
-                        disableOnInteraction: false, // Prevent autoplay from stopping on interaction
-                      }}
-                      effect={"creative"}
-                      creativeEffect={{
-                        prev: {
-                          shadow: true,
-                          translate: [0, 0, -400],
-                        },
-                        next: {
-                          translate: ["100%", 0, 0],
-                        },
-                      }}
-                      modules={[
-                        Autoplay,
-                        Navigation,
-                        Pagination,
-                        EffectCreative,
-                      ]}
-                      style={{ borderRadius: "16px", overflow: "hidden" }}
-                    >
-                      {tempimages?.map((item, index) => (
-                        <SwiperSlide key={index}>
-                          <Box
-                            component="img"
-                            src={item}
-                            alt={`Post image ${index + 1}`}
-                            sx={{
-                              width: "100%",
-                              height: "500px",
-                              objectFit: "cover",
-                              borderRadius: "16px",
-                            }}
-                          />
-                        </SwiperSlide>
-                      ))}
-                    </Swiper>
-                  </Grid>
                 </Grid>
-              </CardContent>
-            </Card>
-          </Grid>
-        </Grid>
+              </Grid>
+            </Grid>
+          </CardContent>
+        </Card>
       </Box>
     </>
   );

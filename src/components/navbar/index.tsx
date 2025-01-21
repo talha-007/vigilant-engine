@@ -222,7 +222,12 @@ function Navbar({ position }) {
           {accessToken ? (
             <Box sx={{ display: "flex", alignItems: "center", gap: "10px" }}>
               <IconButton onClick={() => navigate("/chat")}>
-                <Chat sx={{ color: "#fff", ":hover": { color: "#1877F2" } }} />
+                <Chat
+                  sx={{
+                    color: scrolled ? "#000" : "#fff",
+                    ":hover": { color: "#1877F2" },
+                  }}
+                />
               </IconButton>
               <Box sx={{ flexGrow: 0 }}>
                 <Tooltip>

@@ -60,6 +60,7 @@ const EditPost = () => {
   const navigate = useNavigate();
   const getCountries = useSelector((state) => state.filter);
   const cities = useSelector((s) => s.filter) || [];
+  console.log("imageFiles", imageFiles);
 
   useEffect(() => {
     try {
@@ -84,6 +85,24 @@ const EditPost = () => {
       }
     }
   }, [formData.country]);
+
+  const convertUrlsToFiles = async (urls) => {
+    const proxyUrl = "https://cors-anywhere.herokuapp.com/";
+    // const imageUrl =
+    //   "https://zusammenreisen-media.s3.amazonaws.com/media/testuser%40gmail.com/152fd786a4dc3fd4e2b30769b80fe89e_kc2I7nc.jpg";
+
+    const filePromises = urls.map(async (url) => {
+      const response = await fetch(proxyUrl + url);
+      const blob = await response.blob();
+      const fileName = url.split("/").pop(); // Extract file name from the URL
+
+      // Create a new File object
+      return new File([blob], fileName, { type: blob.type });
+    });
+
+    return Promise.all(filePromises);
+  };
+
   useEffect(() => {
     if (id) {
       fetchData();
@@ -107,6 +126,14 @@ const EditPost = () => {
           images: res?.data?.images || [],
         });
         setPreviewImages(res?.data?.images || []);
+        const images = res?.data?.images; // Assuming this is an array of URLs
+        if (Array.isArray(images)) {
+          const imageFiles = await convertUrlsToFiles(images);
+          console.log(imageFiles); // Log the array of File objects
+          setImageFiles(imageFiles); // Set the state with the File objects
+        } else {
+          console.error("Images data is not an array");
+        }
       }
     } catch (error) {
       console.log(error);
@@ -180,7 +207,7 @@ const EditPost = () => {
     return Object.values(temp).every((x) => x === "");
   };
 
-  const handleAddPost = async () => {
+  const handleEditPost = async () => {
     if (validations()) {
       const postData = new FormData();
       postData.append("title", formData.title);
@@ -223,10 +250,6 @@ const EditPost = () => {
     }
   };
   const dummyImage = "https://via.placeholder.com/150?text=No+Image+Uploaded";
-  console.log(
-    "formadata",
-    getCountries?.data?.find((item: any) => item.id === formData.country)
-  );
 
   return (
     <>
@@ -278,13 +301,9 @@ const EditPost = () => {
                 }
                 getOptionLabel={(option) => option?.name || ""}
                 options={getCountries?.data || []}
-                value={
-                  Array.isArray(getCountries?.data)
-                    ? getCountries?.data?.find(
-                        (item: any) => item.id === formData.country
-                      )
-                    : null
-                }
+                value={getCountries?.data?.find(
+                  (item: any) => item.id === formData.country
+                )}
                 onChange={(event, newValue) => {
                   handleChange({
                     target: { name: "country", value: newValue?.id || "" },
@@ -505,7 +524,7 @@ const EditPost = () => {
 
             <Grid item xs={12}>
               {" "}
-              <Button variant="contained" size="large" onClick={handleAddPost}>
+              <Button variant="contained" size="large" onClick={handleEditPost}>
                 {isLoading ? "loading..." : "Edit Post"}
               </Button>
             </Grid>

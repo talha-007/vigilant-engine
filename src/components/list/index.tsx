@@ -21,6 +21,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { get_AllCountries } from "../../redux/slice/filterSlice";
 import { get_AllPosts } from "../../redux/slice/postsSlice";
 import { listStyles } from "../../pages/styles";
+import image1 from "../../assets/2.jpg";
+import Iconify from "../iconify";
 
 const UserPosts = () => {
   const dispatch = useDispatch();
@@ -136,9 +138,9 @@ const UserPosts = () => {
             </Button>
           </Box>
 
-          <Grid container spacing={2} sx={{ padding: 2 }}>
+          {/* <Grid container spacing={2} sx={{ padding: 2 }}>
             {currentPosts?.length > 0 ? (
-              currentPosts?.map((data: any, index) => (
+              currentPosts?.map((item: any, index) => (
                 <Grid item key={index} xs={12} md={4}>
                   <Card
                     sx={{
@@ -158,13 +160,25 @@ const UserPosts = () => {
                     <CardContent
                       sx={{
                         padding: 0,
-                        height: "200px",
+                        height: "300px",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
                       }}
                     >
-                      {/* Overlay Details */}
+                   
+                      <Box
+                        className="bgImage"
+                        sx={{
+                          width: "100%",
+                          height: "100%",
+                          backgroundImage: `url(${image1})`,
+                          backgroundSize: "cover",
+                          backgroundPosition: "center",
+                          transition: "transform 0.3s ease-in-out",
+                        }}
+                      />
+                    
                       <Box
                         className="overlay"
                         sx={{
@@ -173,97 +187,120 @@ const UserPosts = () => {
                           left: 0,
                           width: "100%",
                           height: "100%",
-
+                          backgroundColor: "rgba(0, 0, 0, 0.3)",
+                          color: "white",
                           display: "flex",
                           flexDirection: "column",
+                          justifyContent: "space-evenly",
                           padding: 2,
+                          
+                          transition: "transform 0.4s ease-in-out",
+                          overflowY: "auto",
                         }}
                       >
-                        {/* Buttons */}
                         <Box
+                          className="overlay"
                           sx={{
+                            position: "absolute",
+                            bottom: 0,
+                            left: 0,
+                            width: "100%",
+                            height: "100%",
+                            justifyContent: "space-between",
                             display: "flex",
-                            justifyContent: "flex-end",
-                            gap: 1,
+                            flexDirection: "column",
+                            padding: 2,
                           }}
                         >
-                          {profile?.profile?.profile?.id ===
-                            data?.posted_by?.id && (
-                            <Button
-                              variant="outlined"
-                              color="primary"
-                              size="small"
-                              sx={{
-                                backgroundColor: "rgba(255, 255, 255, 0.2)",
-                              }}
-                              onClick={() => navigate(`/edit/post/${data.id}`)}
-                            >
-                              Edit
-                            </Button>
-                          )}
-
-                          <Button
-                            variant="outlined"
-                            color="primary"
-                            size="small"
-                            sx={{
-                              backgroundColor: "rgba(255, 255, 255, 0.2)",
-                            }}
-                            onClick={() => navigate(`/details/${data?.id}`)}
-                          >
-                            See Details
-                          </Button>
-                        </Box>
-                        {/* User Details */}
-                        <Box
-                          sx={{
-                            textAlign: "left",
-                            marginTop: 2,
-                            display: "flex",
-                            gap: "10px",
-                            justifyContent: "start",
-                          }}
-                        >
-                          <Avatar
-                            alt={data?.posted_by?.user?.name}
-                            src={data?.posted_by?.picture}
-                            sx={{
-                              width: 40,
-                              height: 40,
-                            }}
-                          />
+                          
                           <Box
                             sx={{
                               display: "flex",
-                              alignItems: "flex-start",
-                              flexDirection: "column",
+                              justifyContent: "flex-end",
+                              gap: 1,
                             }}
                           >
-                            <Typography variant="h6">
-                              {data?.posted_by?.user?.name}
-                            </Typography>
-                            <Typography variant="body2">
-                              {new Date(data?.posted_on).toLocaleDateString()}
-                            </Typography>
-                            <Typography
-                              sx={{ fontSize: "13px", fontWeight: "bold" }}
+                            {profile?.profile?.profile?.id ===
+                              item?.posted_by?.id && (
+                              <Button
+                                variant="outlined"
+                                size="small"
+                                sx={{
+                                  backgroundColor: "rgba(255, 255, 255, 0.2)",
+                                  minWidth: "40px",
+                                  color: "#fff",
+                                }}
+                                onClick={() =>
+                                  navigate(`/edit/post/${item.id}`)
+                                }
+                              >
+                                <Iconify icon="cuida:edit-outline" />
+                              </Button>
+                            )}
+
+                            <Button
+                              variant="outlined"
+                              size="small"
+                              sx={{
+                                backgroundColor: "rgba(255, 255, 255, 0.2)",
+                                color: "#fff",
+                              }}
+                              onClick={() => navigate(`/details/${item?.id}`)}
                             >
-                              {data.travel_to_city}
-                              {", "}
-                              {data.travel_to_country}
-                            </Typography>
-                            <Typography
-                              variant="body2"
-                              noWrap
-                              style={{
-                                overflow: "hidden",
-                                textOverflow: "ellipsis",
-                                whiteSpace: "nowrap",
-                                width: "260px",
+                              See Details
+                            </Button>
+                          </Box>
+                         
+                          <Box
+                            sx={{
+                              textAlign: "left",
+                              marginTop: 2,
+                              display: "flex",
+                              gap: "10px",
+                              justifyContent: "start",
+                            }}
+                          >
+                            <Avatar
+                              alt={item?.posted_by?.user?.name}
+                              src={item?.posted_by?.picture}
+                              sx={{
+                                width: 40,
+                                height: 40,
+                              }}
+                            />
+                            <Box
+                              sx={{
+                                display: "flex",
+                                alignItems: "flex-start",
+                                flexDirection: "column",
                               }}
                             >
-                              {data?.text}
-                            </Typography>
+                              <Typography variant="h6">
+                                {item?.posted_by?.user?.name}
+                              </Typography>
+                              <Typography variant="body2">
+                                {new Date(item?.posted_on).toLocaleDateString()}
+                              </Typography>
+                              <Typography
+                                sx={{ fontSize: "13px", fontWeight: "bold" }}
+                              >
+                                {item.travel_to_city}
+                                {", "}
+                                {item.travel_to_country}
+                              </Typography>
+                              <Typography
+                                variant="body2"
+                                noWrap
+                                style={{
+                                  overflow: "hidden",
+                                  textOverflow: "ellipsis",
+                                  whiteSpace: "nowrap",
+                                  width: "260px",
+                                }}
+                              >
+                                {item?.text}
+                              </Typography>
+                            </Box>
                           </Box>
                         </Box>
                       </Box>
@@ -284,7 +321,317 @@ const UserPosts = () => {
                 No posts found matching the filters.
               </Typography>
             )}
+          </Grid> */}
+          <Grid container spacing={2} sx={{ padding: 2 }}>
+            {currentPosts?.length > 0 ? (
+              currentPosts?.map((item: any, index) => (
+                <Grid item key={index} xs={12} md={4}>
+                  <Card>
+                    <CardContent>
+                      <Box
+                        sx={{
+                          width: "100%",
+                          height: "200px",
+                          borderRadius: "10px",
+                          overflow: "hidden",
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            width: "100%",
+                            height: "100%",
+                            backgroundImage: `
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+    url(${item?.posted_by?.picture})
+  `,
+                            backgroundSize: "cover",
+                            backgroundPosition: "center",
+                          }}
+                        />
+                        {/* Buttons */}
+
+                        <Box
+                          sx={{
+                            display: "flex",
+                            justifyContent: "flex-end",
+                            alignItems: "center",
+                            gap: "10px",
+                            position: "absolute",
+                            top: "6%",
+                            right: "6%",
+                          }}
+                        >
+                          {profile?.profile?.profile?.id ===
+                            item?.posted_by?.id && (
+                            <Button
+                              variant="outlined"
+                              size="small"
+                              sx={{
+                                backgroundColor: "rgba(255, 255, 255, 0.2)",
+                                minWidth: "40px",
+                                color: "#fff",
+                              }}
+                              onClick={() => navigate(`/edit/post/${item.id}`)}
+                            >
+                              <Iconify icon="cuida:edit-outline" />
+                            </Button>
+                          )}
+
+                          {/* <Button
+                            variant="outlined"
+                            size="small"
+                            sx={{
+                              backgroundColor: "rgba(255, 255, 255, 0.2)",
+                              color: "#fff",
+                              minWidth: "40px",
+                            }}
+                          >
+                            <Iconify icon="lucide:move-right" />
+                          </Button> */}
+                        </Box>
+                      </Box>
+
+                      <Box>
+                        <Box
+                          sx={{
+                            textAlign: "left",
+                            marginTop: 2,
+                            display: "flex",
+                            gap: "10px",
+                            justifyContent: "start",
+                            paddingLeft: "12px",
+                          }}
+                        >
+                          {/* <Avatar
+                            alt={item?.posted_by?.user?.name}
+                            src={item?.posted_by?.picture}
+                            sx={{
+                              width: 50,
+                              height: 50,
+                            }}
+                          /> */}
+                          <Box
+                            sx={{
+                              display: "flex",
+                              alignItems: "flex-start",
+                              flexDirection: "column",
+                            }}
+                          >
+                            <Typography variant="h6">
+                              {item?.posted_by?.user?.name}
+                            </Typography>
+                            <Typography
+                              variant="body2"
+                              sx={{ fontSize: "12px" }}
+                            >
+                              {new Date(item?.posted_on).toLocaleDateString()}
+                            </Typography>
+                            <Typography
+                              sx={{ fontSize: "13px", fontWeight: "bold" }}
+                            >
+                              {item.travel_to_city}
+                              {", "}
+                              {item.travel_to_country}
+                            </Typography>
+                            <Typography
+                              variant="body2"
+                              noWrap
+                              style={{
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                                whiteSpace: "nowrap",
+                                width: "260px",
+                              }}
+                            >
+                              {item?.text}
+                            </Typography>
+                          </Box>
+                        </Box>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            justifyContent: "center",
+                            width: "100%",
+                          }}
+                          mt={2}
+                        >
+                          <Button
+                            onClick={() => navigate(`/details/${item?.id}`)}
+                            variant="contained"
+                            fullWidth
+                          >
+                            See Details
+                          </Button>
+                        </Box>
+                      </Box>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              ))
+            ) : (
+              <Typography
+                variant="h6"
+                sx={{
+                  margin: "auto",
+                  marginTop: 4,
+                  textAlign: "center",
+                  color: "#666",
+                }}
+              >
+                No posts found matching the filters.
+              </Typography>
+            )}
           </Grid>
+          {/* <Grid container spacing={2} sx={{ padding: 2 }}>
+            {currentPosts?.length > 0 ? (
+              currentPosts?.map((item: any, index) => (
+                <Grid item key={index} xs={12} md={4}>
+                  <Card>
+                    <CardContent>
+                      <Box
+                        sx={{
+                          width: "100%",
+                          height: "200px",
+                          borderRadius: "10px",
+                          overflow: "hidden",
+                          position: "relative",
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            position: "absolute",
+                            bottom: "6%",
+                            left: "3%",
+                          }}
+                        >
+                          <Box
+                            sx={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "10px",
+                            }}
+                          >
+                            {" "}
+                            <Avatar
+                              alt={item?.posted_by?.user?.name}
+                              src={item?.posted_by?.picture}
+                              sx={{
+                                width: 40,
+                                height: 40,
+                              }}
+                            />
+                            <Typography variant="body1" color="#fff">
+                              {item?.posted_by?.user?.name}
+                            </Typography>
+                          </Box>
+                        </Box>
+                        <Box
+                          sx={{
+                            width: "100%",
+                            height: "100%",
+                            backgroundImage: `
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+    url(${image1})
+  `,
+                            backgroundSize: "cover",
+                            backgroundPosition: "center",
+                          }}
+                        />
+                        
+                        <Box
+                          sx={{
+                            display: "flex",
+                            justifyContent: "flex-end",
+                            alignItems: "center",
+                            gap: "10px",
+                            position: "absolute",
+                            top: "6%",
+                            right: "6%",
+                          }}
+                        >
+                          {profile?.profile?.profile?.id ===
+                            item?.posted_by?.id && (
+                            <Button
+                              variant="outlined"
+                              size="small"
+                              sx={{
+                                backgroundColor: "rgba(255, 255, 255, 0.2)",
+                                minWidth: "40px",
+                                color: "#fff",
+                              }}
+                              onClick={() => navigate(`/edit/post/${item.id}`)}
+                            >
+                              <Iconify icon="cuida:edit-outline" />
+                            </Button>
+                          )}
+
+                          <Button
+                            variant="outlined"
+                            size="small"
+                            sx={{
+                              backgroundColor: "rgba(255, 255, 255, 0.2)",
+                              color: "#fff",
+                              minWidth: "40px",
+                            }}
+                            onClick={() => navigate(`/details/${item?.id}`)}
+                          >
+                            <Iconify icon="lucide:move-right" />
+                          </Button>
+                        </Box>
+                      </Box>
+
+                      <Box>
+                        <Box
+                          sx={{
+                            textAlign: "left",
+                            marginTop: 2,
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "start",
+                          }}
+                        >
+                          <Typography variant="body2" sx={{ fontSize: "12px" }}>
+                            {new Date(item?.posted_on).toLocaleDateString()}
+                          </Typography>
+                          <Typography
+                            sx={{ fontSize: "13px", fontWeight: "bold" }}
+                          >
+                            {item.travel_to_city}
+                            {", "}
+                            {item.travel_to_country}
+                          </Typography>
+                          <Typography
+                            variant="body2"
+                            noWrap
+                            style={{
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
+                              whiteSpace: "nowrap",
+                              width: "260px",
+                            }}
+                          >
+                            {item?.text}
+                          </Typography>
+                        </Box>
+                      </Box>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              ))
+            ) : (
+              <Typography
+                variant="h6"
+                sx={{
+                  margin: "auto",
+                  marginTop: 4,
+                  textAlign: "center",
+                  color: "#666",
+                }}
+              >
+                No posts found matching the filters.
+              </Typography>
+            )}
+          </Grid> */}
           <Box
             sx={{
               display: "flex",
